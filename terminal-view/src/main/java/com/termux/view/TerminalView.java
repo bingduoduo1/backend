@@ -37,6 +37,12 @@ import com.termux.terminal.TerminalEmulator;
 import com.termux.terminal.TerminalSession;
 
 /** View displaying and interacting with a {@link TerminalSession}. */
+
+/**
+ * @author butub
+ * 用于显示的view,和对应的TerminalSession交互
+ */
+
 public final class TerminalView extends View {
 
     /** Log view key and IME events. */

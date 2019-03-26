@@ -1,12 +1,12 @@
 package com.termux.app;
 
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.SharedPreferences;//存储　通常存储配置信息,xml格式
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.util.TypedValue;
 import android.widget.Toast;
-import com.termux.terminal.TerminalSession;
+import com.termux.terminal.TerminalSession;//模拟器的Session
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -19,9 +19,15 @@ import java.lang.annotation.RetentionPolicy;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
+import java.util.Properties;//读取java 配置文件
 
 import androidx.annotation.IntDef;
+
+/**
+ * @author butub
+ * 处理配置文件,并且配置拓展键盘和字体大小
+ */
+
 
 final class TermuxPreferences {
 
@@ -41,10 +47,10 @@ final class TermuxPreferences {
         final int shortcutAction;
     }
 
-    static final int SHORTCUT_ACTION_CREATE_SESSION = 1;
-    static final int SHORTCUT_ACTION_NEXT_SESSION = 2;
-    static final int SHORTCUT_ACTION_PREVIOUS_SESSION = 3;
-    static final int SHORTCUT_ACTION_RENAME_SESSION = 4;
+    static final int SHORTCUT_ACTION_CREATE_SESSION = 1; //快捷键　->打开新的回话
+    static final int SHORTCUT_ACTION_NEXT_SESSION = 2;   //->下一个会话
+    static final int SHORTCUT_ACTION_PREVIOUS_SESSION = 3;// -> 上一个会话
+    static final int SHORTCUT_ACTION_RENAME_SESSION = 4; // 重命名Session
 
     static final int BELL_VIBRATE = 1;
     static final int BELL_BEEP = 2;
@@ -55,7 +61,7 @@ final class TermuxPreferences {
 
     private static final String SHOW_EXTRA_KEYS_KEY = "show_extra_keys";
     private static final String FONTSIZE_KEY = "fontsize";
-    private static final String CURRENT_SESSION_KEY = "current_session";
+    private static final String CURRENT_SESSION_KEY = "current_session"; // 这个key 是个　String....
     private static final String SCREEN_ALWAYS_ON_KEY = "screen_always_on";
 
     private boolean mScreenAlwaysOn;
@@ -69,28 +75,33 @@ final class TermuxPreferences {
 
     String[][] mExtraKeys;
 
-    final List<KeyboardShortcut> shortcuts = new ArrayList<>();
+    final List<KeyboardShortcut> shortcuts = new ArrayList<>();//快捷键列表
 
     /**
      * If value is not in the range [min, max], set it to either min or max.
+     * clamp 夹紧?
      */
     static int clamp(int value, int min, int max) {
         return Math.min(Math.max(value, min), max);
     }
 
     TermuxPreferences(Context context) {
-        reloadFromProperties(context);
+        reloadFromProperties(context);//加载快捷键设置
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         float dipInPixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, context.getResources().getDisplayMetrics());
 
         // This is a bit arbitrary and sub-optimal. We want to give a sensible default for minimum font size
         // to prevent invisible text due to zoom be mistake:
+        //这有点武断和次优。我们想对最小字体大小给出一个合理的默认值。
+        //要防止因缩放而导致不可见文本，请执行以下操作：
+
         MIN_FONTSIZE = (int) (4f * dipInPixels);
 
-        mShowExtraKeys = prefs.getBoolean(SHOW_EXTRA_KEYS_KEY, true);
+        mShowExtraKeys = prefs.getBoolean(SHOW_EXTRA_KEYS_KEY, true);//读取配置
         mScreenAlwaysOn = prefs.getBoolean(SCREEN_ALWAYS_ON_KEY, false);
 
+        //设置字体大小
         // http://www.google.com/design/spec/style/typography.html#typography-line-height
         int defaultFontSize = Math.round(12 * dipInPixels);
         // Make it divisible by 2 since that is the minimal adjustment step:
@@ -101,10 +112,10 @@ final class TermuxPreferences {
         } catch (NumberFormatException | ClassCastException e) {
             mFontSize = defaultFontSize;
         }
-        mFontSize = clamp(mFontSize, MIN_FONTSIZE, MAX_FONTSIZE); 
+        mFontSize = clamp(mFontSize, MIN_FONTSIZE, MAX_FONTSIZE); //最后调整区间
     }
 
-    boolean toggleShowExtraKeys(Context context) {
+    boolean toggleShowExtraKeys(Context context) {//切换拓展键盘显示
         mShowExtraKeys = !mShowExtraKeys;
         PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(SHOW_EXTRA_KEYS_KEY, mShowExtraKeys).apply();
         return mShowExtraKeys;
@@ -114,7 +125,7 @@ final class TermuxPreferences {
         return mFontSize;
     }
 
-    void changeFontSize(Context context, boolean increase) {
+    void changeFontSize(Context context, boolean increase) {// 改变字体大小
         mFontSize += (increase ? 1 : -1) * 2;
         mFontSize = Math.max(MIN_FONTSIZE, Math.min(mFontSize, MAX_FONTSIZE));
 
@@ -131,20 +142,20 @@ final class TermuxPreferences {
         PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(SCREEN_ALWAYS_ON_KEY, newValue).apply();
     }
 
-    static void storeCurrentSession(Context context, TerminalSession session) {
+    static void storeCurrentSession(Context context, TerminalSession session) {//　保存当前Session
         PreferenceManager.getDefaultSharedPreferences(context).edit().putString(TermuxPreferences.CURRENT_SESSION_KEY, session.mHandle).apply();
     }
 
-    static TerminalSession getCurrentSession(TermuxActivity context) {
+    static TerminalSession getCurrentSession(TermuxActivity context) {// 得到当前Session
         String sessionHandle = PreferenceManager.getDefaultSharedPreferences(context).getString(TermuxPreferences.CURRENT_SESSION_KEY, "");
-        for (int i = 0, len = context.mTermService.getSessions().size(); i < len; i++) {
+        for (int i = 0, len = context.mTermService.getSessions().size(); i < len; i++) {// 遍历寻找Session　然后返回
             TerminalSession session = context.mTermService.getSessions().get(i);
             if (session.mHandle.equals(sessionHandle)) return session;
         }
         return null;
     }
     
-    void reloadFromProperties(Context context) {
+    void reloadFromProperties(Context context) {//从properties中加载配置
         File propsFile = new File(TermuxService.HOME_PATH + "/.termux/termux.properties");
         if (!propsFile.exists())
             propsFile = new File(TermuxService.HOME_PATH + "/.config/termux/termux.properties");
@@ -192,7 +203,7 @@ final class TermuxPreferences {
 
         mBackIsEscape = "escape".equals(props.getProperty("back-key", "back"));
 
-        shortcuts.clear();
+        shortcuts.clear();// 快捷键列表clear
         parseAction("shortcut.create-session", SHORTCUT_ACTION_CREATE_SESSION, props);
         parseAction("shortcut.next-session", SHORTCUT_ACTION_NEXT_SESSION, props);
         parseAction("shortcut.previous-session", SHORTCUT_ACTION_PREVIOUS_SESSION, props);

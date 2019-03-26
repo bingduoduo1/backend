@@ -22,6 +22,10 @@ import java.io.IOException;
 
 import androidx.annotation.NonNull;
 
+/**
+ * @author butub
+ * 用于开启Ｔermux的广播接收器?
+ */
 public class TermuxOpenReceiver extends BroadcastReceiver {
 
     @Override

@@ -40,6 +40,16 @@ import java.util.List;
  * Optionally may hold a wake and a wifi lock, in which case that is shown in the notification - see
  * {@link #buildNotification()}.
  */
+
+/**
+ * @author butub
+ * 开启一个服务　控制多个termial　Session, 服务在前台展示所有session,他们仍然在run没有被终止
+ * 用户通过TermuxActivity和Session交互,但这个服务可能会比Activity更加持久（长生不老outlive）,
+ * 这种情况下，用户可以稍后重启termuxActivity来重新连接这些Session
+ *
+ * 为了让termial Session和生成的进程按照用户的意愿保持alive,　这个服务被设定为前台服务 Service startForeGound
+ * 可以选择一个唤醒和一个wifi?lock, 可能会在通知栏看到
+ */
 public final class TermuxService extends Service implements SessionChangedCallback {
 
     private static final String NOTIFICATION_CHANNEL_ID = "termux_notification_channel";
