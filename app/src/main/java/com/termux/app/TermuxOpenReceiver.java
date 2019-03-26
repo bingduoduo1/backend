@@ -106,6 +106,7 @@ public class TermuxOpenReceiver extends BroadcastReceiver {
             Log.e(EmulatorDebug.LOG_TAG, "termux-open: No app handles the url " + data);
         }
     }
+    //end onReceive
 
     public static class ContentProvider extends android.content.ContentProvider {
 

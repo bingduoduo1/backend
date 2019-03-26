@@ -81,6 +81,13 @@ import androidx.viewpager.widget.ViewPager;
  * </ul>
  * about memory leaks.
  */
+
+
+/**
+ * @author butub
+ * important!
+ * 这个活动控制terminal 模拟器
+ */
 public final class TermuxActivity extends Activity implements ServiceConnection {
 
     private static final int CONTEXTMENU_SELECT_URL_ID = 0;

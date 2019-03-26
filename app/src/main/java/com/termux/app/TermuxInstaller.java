@@ -47,6 +47,20 @@ import java.util.zip.ZipInputStream;
  * <p/>
  * (5.2) For every other zip entry, extract it into $STAGING_PREFIX and set execute permissions if necessary.
  */
+
+
+/**
+ * @author butub
+ * 安装 Ｔermux 启动安装的包　
+ * 1. 如果　$PREFIX存在,　默认是正确的.这需要我们正确执行如下的步骤
+ * 2.一个进度对话框显示"Installing..."
+ * 3.一个staging?分层？的文件夹, $STAGING_PREFIX,
+ * 4.这个体系结构和对应的启动zip url在　detemineZipUrl()中实现
+ * 5.Zip包含了$PREFIX的entries条目？,　并通过zip input stream 下载和提取,持续处理压缩文件条目
+ *  5.1 如果遇到的压缩文件是symlinks.txt, 遍历它,　并且记下所有用来启动的symlinks
+ *  5.2 对于所有的zip条目, 把它提取到 $staging_prefix, 并且必要时设定运行权限
+ *
+ */
 final class TermuxInstaller {
 
     /** Performs setup if necessary. */

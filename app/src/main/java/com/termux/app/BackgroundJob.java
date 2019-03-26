@@ -18,6 +18,11 @@ import java.util.List;
 /**
  * A background job launched by Termux.
  */
+
+/**
+ * @author butub
+ * 后台工作
+ */
 public final class BackgroundJob {
 
     private static final String LOG_TAG = "termux-task";

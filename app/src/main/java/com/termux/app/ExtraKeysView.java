@@ -22,12 +22,17 @@ import android.widget.PopupWindow;
 import android.widget.ToggleButton;
 
 import com.termux.R;
-import com.termux.terminal.TerminalSession;
-import com.termux.view.TerminalView;
+import com.termux.terminal.TerminalSession;//terminal session
+import com.termux.view.TerminalView;        //terminal view
 
 /**
  * A view showing extra keys (such as Escape, Ctrl, Alt) not normally available on an Android soft
  * keyboard.
+ */
+
+/**
+ * @author butub
+ * 拓展的键盘项　Esc Ctr ALt
  */
 public final class ExtraKeysView extends GridLayout {
 
