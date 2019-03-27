@@ -13,7 +13,7 @@ import android.os.Build;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.util.AttributeSet;
+import android.util.AttributeSet;//xml
 import android.util.Log;
 import android.view.accessibility.AccessibilityManager;
 import android.view.ActionMode;
@@ -49,17 +49,18 @@ public final class TerminalView extends View {
     private static final boolean LOG_KEY_EVENTS = false;
 
     /** The currently displayed terminal session, whose emulator is {@link #mEmulator}. */
-    TerminalSession mTermSession;
+    TerminalSession mTermSession;// 当前 Terminal Session
     /** Our terminal emulator whose session is {@link #mTermSession}. */
-    TerminalEmulator mEmulator;
+    TerminalEmulator mEmulator; // 当前Session 对应的　Emulator
 
-    TerminalRenderer mRenderer;
+    TerminalRenderer mRenderer; // emulator -> canvas
 
-    TerminalViewClient mClient;
+    TerminalViewClient mClient; // view client
 
     /** The top row of text to display. Ranges from -activeTranscriptRows to 0. */
-    int mTopRow;
+    int mTopRow;                //显示文本的top行
 
+    //选择文本用
     boolean mIsSelectingText = false, mIsDraggingLeftSelection, mInitialTextSelection;
     int mSelX1 = -1, mSelX2 = -1, mSelY1 = -1, mSelY2 = -1;
     float mSelectionDownX, mSelectionDownY;
@@ -67,8 +68,10 @@ public final class TerminalView extends View {
     private BitmapDrawable mLeftSelectionHandle, mRightSelectionHandle;
 
     float mScaleFactor = 1.f;
-    final GestureAndScaleRecognizer mGestureRecognizer;
+    final GestureAndScaleRecognizer mGestureRecognizer; // GestureAndScaleRecognizer
 
+
+    //跟踪鼠标
     /** Keep track of where mouse touch event started which we report as mouse scroll. */
     private int mMouseScrollStartX = -1, mMouseScrollStartY = -1;
     /** Keep track of the time when a touch event leading to sending mouse scroll events started. */
@@ -80,12 +83,14 @@ public final class TerminalView extends View {
     float mScrollRemainder;
 
     /** If non-zero, this is the last unicode code point received if that was a combining character. */
+    //如果非零，这是最后一个接收到的Unicode码位（如果是组合字符）。
     int mCombiningAccent;
 
     private boolean mAccessibilityEnabled;
 
     public TerminalView(Context context, AttributeSet attributes) { // NO_UCD (unused code)
-        super(context, attributes);
+        super(context, attributes);// View
+        // 开手势识别器
         mGestureRecognizer = new GestureAndScaleRecognizer(context, new GestureAndScaleRecognizer.Listener() {
 
             boolean scrolledWithFinger;
@@ -210,6 +215,9 @@ public final class TerminalView extends View {
         mAccessibilityEnabled = am.isEnabled();
     }
 
+    /**
+     * on key listener 监听各种key，　IME: Input Method Editor 和硬件的输入
+     */
     /**
      * @param onKeyListener Listener for all kinds of key events, both hardware and IME (which makes it different from that
      *                      available with {@link View#setOnKeyListener(OnKeyListener)}.

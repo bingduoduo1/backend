@@ -1,14 +1,17 @@
 package com.termux.view;
 
 import android.content.Context;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
+import android.view.GestureDetector;//GestureDetector:手势检测，用于辅助检测用户单击、滑动、长按、双击等行为
+import android.view.MotionEvent; // 触摸事件
+import android.view.ScaleGestureDetector;//专门用来检测两个手指在屏幕上做缩放的手势用的
+
+
 
 /** A combination of {@link GestureDetector} and {@link ScaleGestureDetector}. */
 final class GestureAndScaleRecognizer {
 
     public interface Listener {
+
         boolean onSingleTapUp(MotionEvent e);
 
         boolean onDoubleTap(MotionEvent e);
