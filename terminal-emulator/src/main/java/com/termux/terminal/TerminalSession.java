@@ -28,6 +28,11 @@ import java.util.UUID;
  * <p>
  * NOTE: The terminal session may outlive the EmulatorView, so be careful with callbacks!
  */
+
+/**
+ * @author butub
+ *  important!
+ */
 public final class TerminalSession extends TerminalOutput {
 
     /** Callback to be invoked when a {@link TerminalSession} changes. */

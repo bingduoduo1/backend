@@ -9,11 +9,11 @@ import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.content.ComponentName;
+import android.content.ComponentName; //启动别的应用
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.ServiceConnection;
+import android.content.ServiceConnection;//后台服务连接
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -81,22 +81,26 @@ import androidx.viewpager.widget.ViewPager;
  * </ul>
  * about memory leaks.
  */
+
+/**
+ * app的入口主活动
+ */
 public final class TermuxActivity extends Activity implements ServiceConnection {
 
-    private static final int CONTEXTMENU_SELECT_URL_ID = 0;
-    private static final int CONTEXTMENU_SHARE_TRANSCRIPT_ID = 1;
-    private static final int CONTEXTMENU_PASTE_ID = 3;
-    private static final int CONTEXTMENU_KILL_PROCESS_ID = 4;
-    private static final int CONTEXTMENU_RESET_TERMINAL_ID = 5;
-    private static final int CONTEXTMENU_STYLING_ID = 6;
-    private static final int CONTEXTMENU_HELP_ID = 8;
-    private static final int CONTEXTMENU_TOGGLE_KEEP_SCREEN_ON = 9;
+    private static final int CONTEXTMENU_SELECT_URL_ID = 0; // select url id
+    private static final int CONTEXTMENU_SHARE_TRANSCRIPT_ID = 1; // share transcript id
+    private static final int CONTEXTMENU_PASTE_ID = 3;              //paste id
+    private static final int CONTEXTMENU_KILL_PROCESS_ID = 4;       //kill process id
+    private static final int CONTEXTMENU_RESET_TERMINAL_ID = 5;     // reset terminal id
+    private static final int CONTEXTMENU_STYLING_ID = 6;            // styling id
+    private static final int CONTEXTMENU_HELP_ID = 8;               // help id
+    private static final int CONTEXTMENU_TOGGLE_KEEP_SCREEN_ON = 9; //toggle keep screen on
 
-    private static final int MAX_SESSIONS = 8;
+    private static final int MAX_SESSIONS = 8;                  //max sessions
 
-    private static final int REQUESTCODE_PERMISSION_STORAGE = 1234;
+    private static final int REQUESTCODE_PERMISSION_STORAGE = 1234;//request code permission storage
 
-    private static final String RELOAD_STYLE_ACTION = "com.termux.app.reload_style";
+    private static final String RELOAD_STYLE_ACTION = "com.termux.app.reload_style";// reload style action
 
     /** The main view of the activity showing the terminal. Initialized in onCreate(). */
     @SuppressWarnings("NullableProblems")
@@ -111,6 +115,9 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
      * The connection to the {@link TermuxService}. Requested in {@link #onCreate(Bundle)} with a call to
      * {@link #bindService(Intent, ServiceConnection, int)}, and obtained and stored in
      * {@link #onServiceConnected(ComponentName, IBinder)}.
+     */
+    /**
+     * 连接Termux Service。
      */
     TermuxService mTermService;
 
@@ -207,14 +214,15 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
         mSettings = new TermuxPreferences(this);
 
         setContentView(R.layout.drawer_layout);
-        mTerminalView = findViewById(R.id.terminal_view);
-        mTerminalView.setOnKeyListener(new TermuxViewClient(this));
+        mTerminalView = findViewById(R.id.terminal_view);//这个view 在drawer_layout 中
+        mTerminalView.setOnKeyListener(new TermuxViewClient(this));// TerminalView,设定mClient
 
         mTerminalView.setTextSize(mSettings.getFontSize());
         mTerminalView.setKeepScreenOn(mSettings.isScreenAlwaysOn());
         mTerminalView.requestFocus();
 
-        final ViewPager viewPager = findViewById(R.id.viewpager);
+        //分页
+        final ViewPager viewPager = findViewById(R.id.viewpager);//androidx.viewpager.widget.ViewPager
         if (mSettings.mShowExtraKeys) viewPager.setVisibility(View.VISIBLE);
         
         
@@ -235,31 +243,31 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
 
             @NonNull
             @Override
-            public Object instantiateItem(@NonNull ViewGroup collection, int position) {
-                LayoutInflater inflater = LayoutInflater.from(TermuxActivity.this);
+            public Object instantiateItem(@NonNull ViewGroup collection, int position) {//实例化
+                LayoutInflater inflater = LayoutInflater.from(TermuxActivity.this); //布局填充
                 View layout;
                 if (position == 0) {
                     layout = mExtraKeysView = (ExtraKeysView) inflater.inflate(R.layout.extra_keys_main, collection, false);
                     mExtraKeysView.reload(mSettings.mExtraKeys, ExtraKeysView.defaultCharDisplay);
                 } else {
                     layout = inflater.inflate(R.layout.extra_keys_right, collection, false);
-                    final EditText editText = layout.findViewById(R.id.text_input);
+                    final EditText editText = layout.findViewById(R.id.text_input);//text_input,输入的缓存
                     editText.setOnEditorActionListener((v, actionId, event) -> {
                         TerminalSession session = getCurrentTermSession();
                         if (session != null) {
                             if (session.isRunning()) {
                                 String textToSend = editText.getText().toString();
                                 if (textToSend.length() == 0) textToSend = "\r";
-                                session.write(textToSend);
+                                session.write(textToSend);//写入
                             } else {
-                                removeFinishedSession(session);
+                                removeFinishedSession(session);//remove没在running的currentTermSession
                             }
-                            editText.setText("");
+                            editText.setText("");//刷新
                         }
                         return true;
                     });
                 }
-                collection.addView(layout);
+                collection.addView(layout);//ViewGroup collection
                 return layout;
             }
 
@@ -283,13 +291,14 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
 
         View newSessionButton = findViewById(R.id.new_session_button);
         newSessionButton.setOnClickListener(v -> addNewSession(false, null));
-        newSessionButton.setOnLongClickListener(v -> {
+        newSessionButton.setOnLongClickListener(v -> {//长按设定Session名字并创建
             DialogUtils.textInput(TermuxActivity.this, R.string.session_new_named_title, null, R.string.session_new_named_positive_button,
                 text -> addNewSession(false, text), R.string.new_session_failsafe, text -> addNewSession(true, text)
                 , -1, null, null);
             return true;
-        });
+        }); //failsafe?故障保护?
 
+        //todo 这个IMM 可能需要被替换 或者 关闭
         findViewById(R.id.toggle_keyboard_button).setOnClickListener(v -> {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
@@ -303,8 +312,9 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
 
         registerForContextMenu(mTerminalView);
 
-        Intent serviceIntent = new Intent(this, TermuxService.class);
+        Intent serviceIntent = new Intent(this, TermuxService.class);//启动服务
         // Start the service and make it run regardless of who is bound to it:
+        // 启动服务，不论绑定什么对象
         startService(serviceIntent);
         if (!bindService(serviceIntent, this, 0))
             throw new RuntimeException("bindService() failed");
@@ -312,7 +322,7 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
         checkForFontAndColors();
 
         mBellSoundId = mBellSoundPool.load(this, R.raw.bell, 1);
-    }
+    }//end onCreate
 
     void toggleShowExtraKeys() {
         final ViewPager viewPager = findViewById(R.id.viewpager);
@@ -324,6 +334,9 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
         }
     }
 
+    /**
+     * 重写ServiceConnecction接口的方法onServiceConnected, onCreate中绑定服务后会启动这个回调方法
+     */
     /**
      * Part of the {@link ServiceConnection} interface. The service is bound with
      * {@link #bindService(Intent, ServiceConnection, int)} in {@link #onCreate(Bundle)} which will cause a call to this
