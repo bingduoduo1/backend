@@ -16,6 +16,12 @@ import com.termux.terminal.WcWidth;
  * <p/>
  * Saves font metrics, so needs to be recreated each time the typeface or font size changes.
  */
+
+/**
+ * @author butub
+ * 把　TermalEmulator 渲染成　Canvas
+ */
+
 public final class TerminalRenderer {
 
     final int mTextSize;

@@ -10,6 +10,12 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+
+/**
+ * @author butub
+ * important!
+ * 实现会话
+ */
 public final class DialogUtils {
 
     public interface TextSetListener {

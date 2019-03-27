@@ -11,12 +11,17 @@ import android.view.inputmethod.InputMethodManager;
 import com.termux.terminal.KeyHandler;
 import com.termux.terminal.TerminalEmulator;
 import com.termux.terminal.TerminalSession;
-import com.termux.view.TerminalViewClient;
+import com.termux.view.TerminalViewClient;//接口在terminal-view中
 
 import java.util.List;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
+
+/**
+ * @author butub
+ *
+ */
 public final class TermuxViewClient implements TerminalViewClient {
 
     final TermuxActivity mActivity;

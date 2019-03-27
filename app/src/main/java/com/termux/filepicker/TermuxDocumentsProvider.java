@@ -31,6 +31,13 @@ import java.util.LinkedList;
  * offering two different ways of accessing your stored data. This would be confusing for users."
  * - http://developer.android.com/guide/topics/providers/document-provider.html#43
  */
+
+/**
+ * ＠butub
+ * 这是个document provider 用来给别的app提供$HOME目录中的文件用的
+ * document provider 和 ACTION_GET_CONTENT intent 应该是互斥的,不然在Ｓystem Picker UI中就会看到
+ * 两个指向相同文件的途径,这会让用户感到困惑
+ */
 public class TermuxDocumentsProvider extends DocumentsProvider {
 
     private static final String ALL_MIME_TYPES = "*/*";

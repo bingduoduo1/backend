@@ -22,6 +22,10 @@ import java.io.IOException;
 
 import androidx.annotation.NonNull;
 
+/**
+ * @author butub
+ * 用于开启Ｔermux的广播接收器?
+ */
 public class TermuxOpenReceiver extends BroadcastReceiver {
 
     @Override
@@ -106,6 +110,7 @@ public class TermuxOpenReceiver extends BroadcastReceiver {
             Log.e(EmulatorDebug.LOG_TAG, "termux-open: No app handles the url " + data);
         }
     }
+    //end onReceive
 
     public static class ContentProvider extends android.content.ContentProvider {
 
