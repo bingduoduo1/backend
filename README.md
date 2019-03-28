@@ -2,8 +2,12 @@
 [![Join the chat at https://gitter.im/termux/termux](https://badges.gitter.im/termux/termux.svg)](https://gitter.im/termux/termux)
 
 # LOG butub
+
 这个是我本地写注释能run通的
+
 ndk和gradle可能需要最新版本，官方的版本也一直在更新
+
+我是gradle 3.3.0 ndk 19.2.5345600
 Termux app
 ==========
 
