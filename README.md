@@ -1,7 +1,9 @@
 [![Travis build status](https://travis-ci.org/termux/termux-app.svg?branch=master)](https://travis-ci.org/termux/termux-app)
 [![Join the chat at https://gitter.im/termux/termux](https://badges.gitter.im/termux/termux.svg)](https://gitter.im/termux/termux)
 
-
+# LOG butub
+这个是我本地写注释能run通的
+ndk和gradle可能需要最新版本，官方的版本也一直在更新
 Termux app
 ==========
 
