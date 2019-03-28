@@ -82,16 +82,11 @@ import androidx.viewpager.widget.ViewPager;
  * about memory leaks.
  */
 
-<<<<<<< HEAD
-/**
- * app的入口主活动
-=======
 
 /**
  * @author butub
  * important!
  * 这个活动控制terminal 模拟器
->>>>>>> 90c5681fdbc947d1e3b8fd2f3e156df8ea3c8b2f
  */
 public final class TermuxActivity extends Activity implements ServiceConnection {
 
