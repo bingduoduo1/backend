@@ -228,6 +228,9 @@ public final class TerminalSession extends TerminalOutput {
         }.start();
 
     }
+    /**
+     *
+     */
 
     /** Write data to the shell process. */
     @Override

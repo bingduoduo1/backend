@@ -82,16 +82,11 @@ import androidx.viewpager.widget.ViewPager;
  * about memory leaks.
  */
 
-<<<<<<< HEAD
-/**
- * app的入口主活动
-=======
 
 /**
  * @author butub
  * important!
  * 这个活动控制terminal 模拟器
->>>>>>> 90c5681fdbc947d1e3b8fd2f3e156df8ea3c8b2f
  */
 public final class TermuxActivity extends Activity implements ServiceConnection {
 
@@ -266,7 +261,7 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
                             if (session.isRunning()) {
                                 String textToSend = editText.getText().toString();
                                 if (textToSend.length() == 0) textToSend = "\r";
-                                session.write(textToSend);//写入
+                                session.write(textToSend);//写入 !!!KEY
                             } else {
                                 removeFinishedSession(session);//remove没在running的currentTermSession
                             }
