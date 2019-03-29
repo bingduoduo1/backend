@@ -31,10 +31,16 @@ import java.util.UUID;
 
 /**
  * @author butub
- *  important!
+ *  Session, 存在一个实现terminal interface 的进程 process
+ *  构造器会运行一个子进程， 调用upateSize 获得Size后，启动模拟器， 并且创建新的线程区处理subprocess I/O
+ *  在主线程中有所有terminal 模拟和回调方法
+ *  使用 finishIfRunning方法 可以强制退出子进程
+ *  NOTE: 会话可能会在EmulatorView关闭后仍然存活，所以需要对于回调方法小心处理。
+ *
  */
 public final class TerminalSession extends TerminalOutput {
 
+    /** 改变Session 后需要回调的方法*/
     /** Callback to be invoked when a {@link TerminalSession} changes. */
     public interface SessionChangedCallback {
         void onTextChanged(TerminalSession changedSession);
@@ -50,6 +56,7 @@ public final class TerminalSession extends TerminalOutput {
         void onColorsChanged(TerminalSession session);
 
     }
+
 
     private static FileDescriptor wrapFileDescriptor(int fileDescriptor) {
         FileDescriptor result = new FileDescriptor();
@@ -80,6 +87,7 @@ public final class TerminalSession extends TerminalOutput {
     /**
      * A queue written to from a separate thread when the process outputs, and read by main thread to process by
      * terminal emulator.
+     * 一个用
      */
     final ByteQueue mProcessToTerminalIOQueue = new ByteQueue(4096);
     /**
@@ -154,7 +162,7 @@ public final class TerminalSession extends TerminalOutput {
         this.mCwd = cwd;
         this.mArgs = args;
         this.mEnv = env;
-    }
+    }// Constructor
 
     /** Inform the attached pty of the new size and reflow or initialize the emulator. */
     public void updateSize(int columns, int rows) {
@@ -173,14 +181,14 @@ public final class TerminalSession extends TerminalOutput {
 
     /**
      * Set the terminal emulator's window size and start terminal emulation.
-     *
+     * 设置terminal emulator size  启动模拟器
      * @param columns The number of columns in the terminal window.
      * @param rows    The number of rows in the terminal window.
      */
     public void initializeEmulator(int columns, int rows) {
         mEmulator = new TerminalEmulator(this, columns, rows, /* transcript= */2000);
 
-        int[] processId = new int[1];
+        int[] processId = new int[1]; //开启子进程
         mTerminalFileDescriptor = JNI.createSubprocess(mShellPath, mCwd, mArgs, mEnv, processId, rows, columns);
         mShellPid = processId[0];
 

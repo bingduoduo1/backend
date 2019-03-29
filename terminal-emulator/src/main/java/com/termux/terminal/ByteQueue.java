@@ -1,6 +1,11 @@
 package com.termux.terminal;
 
 /** A circular byte buffer allowing one producer and one consumer thread. */
+
+/**
+ * @author butub
+ * 通过这个类实现 byte -> terminal 的具体实现
+ */
 final class ByteQueue {
 
     private final byte[] mBuffer;
