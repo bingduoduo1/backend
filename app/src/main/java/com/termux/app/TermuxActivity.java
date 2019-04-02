@@ -342,7 +342,7 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
     }
 
     /**
-     * 重写ServiceConnecction接口的方法onServiceConnected, onCreate中绑定服务后会启动这个回调方法?
+     * 重写ServiceConnecction接口的方法onServiceConnected, onCreate中绑定服务后会启动这个回调方法
      */
     /**
      * Part of the {@link ServiceConnection} interface. The service is bound with
@@ -350,7 +350,7 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
      * callback method.
      */
     @Override
-    public void onServiceConnected(ComponentName componentName, IBinder service) {
+    public void onServiceConnected(ComponentName componentName, IBinder service) {//todo
         mTermService = ((TermuxService.LocalBinder) service).service;
 
         mTermService.mSessionChangeCallback = new SessionChangedCallback() {
@@ -426,13 +426,15 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
         };
 
         ListView listView = findViewById(R.id.left_drawer_list);
+
+        // 管理所有session的视图
         mListViewAdapter = new ArrayAdapter<TerminalSession>(getApplicationContext(), R.layout.line_in_drawer, mTermService.getSessions()) {
             final StyleSpan boldSpan = new StyleSpan(Typeface.BOLD);
             final StyleSpan italicSpan = new StyleSpan(Typeface.ITALIC);
 
             @NonNull
             @Override
-            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+            public View getView(int position, View convertView, @NonNull ViewGroup parent) {//配置Ｌist样式
                 View row = convertView;
                 if (row == null) {
                     LayoutInflater inflater = getLayoutInflater();
@@ -467,20 +469,21 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
                 firstLineView.setTextColor(color);
                 return row;
             }
-        };
+        };// end mListViewAdapter
+        //配置ListAdapter上的动作
         listView.setAdapter(mListViewAdapter);
-        listView.setOnItemClickListener((parent, view, position, id) -> {
+        listView.setOnItemClickListener((parent, view, position, id) -> {//切换Session
             TerminalSession clickedSession = mListViewAdapter.getItem(position);
             switchToSession(clickedSession);
             getDrawer().closeDrawers();
         });
-        listView.setOnItemLongClickListener((parent, view, position, id) -> {
+        listView.setOnItemLongClickListener((parent, view, position, id) -> {// 重命名Session
             final TerminalSession selectedSession = mListViewAdapter.getItem(position);
             renameSession(selectedSession);
             return true;
         });
 
-        if (mTermService.getSessions().isEmpty()) {
+        if (mTermService.getSessions().isEmpty()) {//如果当前的Ｓession列表是空的就添加新的Session
             if (mIsVisible) {
                 TermuxInstaller.setupIfNeeded(TermuxActivity.this, () -> {
                     if (mTermService == null) return; // Activity might have been destroyed.
@@ -505,7 +508,8 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
                 switchToSession(getStoredCurrentSessionOrLast());
             }
         }
-    }
+    }//end onServiceConnected
+
 
     public void switchToSession(boolean forward) {
         TerminalSession currentSession = getCurrentTermSession();
@@ -538,7 +542,7 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
     }
 
     @Override
-    public void onStart() {
+    public void onStart() {//todo
         super.onStart();
         mIsVisible = true;
 
@@ -547,12 +551,16 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
             switchToSession(getStoredCurrentSessionOrLast());
             mListViewAdapter.notifyDataSetChanged();
         }
-
         registerReceiver(mBroadcastReceiever, new IntentFilter(RELOAD_STYLE_ACTION));
 
         // The current terminal session may have changed while being away, force
         // a refresh of the displayed terminal:
-        mTerminalView.onScreenUpdated();
+        mTerminalView.onScreenUpdated();// 可以在onStart中泰纳一下需要监听的动作
+        if(mTerminalView!=null && getCurrentTermSession()!=null){// 没有用
+            TerminalSession ss = getCurrentTermSession();
+            Toast.makeText(this, "hello", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     @Override
@@ -585,7 +593,7 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
         unbindService(this);
     }
 
-    DrawerLayout getDrawer() {
+    DrawerLayout getDrawer() {//左侧滑动栏
         return (DrawerLayout) findViewById(R.id.drawer_layout);
     }
 
@@ -627,7 +635,7 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
         return toastTitle.toString();
     }
 
-    void noteSessionInfo() {
+    void noteSessionInfo() {//切换的时候显示Session的信息
         if (!mIsVisible) return;
         TerminalSession session = getCurrentTermSession();
         final int indexOfSession = mTermService.getSessions().indexOf(session);

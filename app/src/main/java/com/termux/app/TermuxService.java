@@ -268,16 +268,19 @@ public final class TermuxService extends Service implements SessionChangedCallba
         }
     }
 
+
+    //启动新的Session
+    // cwd change work dir
     TerminalSession createTermSession(String executablePath, String[] arguments, String cwd, boolean failSafe) {
         new File(HOME_PATH).mkdirs();
 
         if (cwd == null) cwd = HOME_PATH;
 
-        String[] env = BackgroundJob.buildEnvironment(failSafe, cwd);
+        String[] env = BackgroundJob.buildEnvironment(failSafe, cwd);//类方法,返回环境变量们
         boolean isLoginShell = false;
 
         if (executablePath == null) {
-            for (String shellBinary : new String[]{"login", "bash", "zsh"}) {
+            for (String shellBinary : new String[]{"login", "bash", "zsh"}) {//在Prefix_path中寻找可以用的shell
                 File shellFile = new File(PREFIX_PATH + "/bin/" + shellBinary);
                 if (shellFile.canExecute()) {
                     executablePath = shellFile.getAbsolutePath();
@@ -295,6 +298,7 @@ public final class TermuxService extends Service implements SessionChangedCallba
         String[] processArgs = BackgroundJob.setupProcessArgs(executablePath, arguments);
         executablePath = processArgs[0];
         int lastSlashIndex = executablePath.lastIndexOf('/');
+        //设置processName , ""+executablePath
         String processName = (isLoginShell ? "-" : "") +
             (lastSlashIndex == -1 ? executablePath : executablePath.substring(lastSlashIndex + 1));
 
@@ -303,8 +307,8 @@ public final class TermuxService extends Service implements SessionChangedCallba
         if (processArgs.length > 1) System.arraycopy(processArgs, 1, args, 1, processArgs.length - 1);
 
         TerminalSession session = new TerminalSession(executablePath, cwd, args, env, this);
-        mTerminalSessions.add(session);
-        updateNotification();
+        mTerminalSessions.add(session);//添加新的Session
+        updateNotification();//更新Toast
         return session;
     }
 

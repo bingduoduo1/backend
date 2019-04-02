@@ -155,6 +155,14 @@ public final class TerminalSession extends TerminalOutput {
     private final String[] mArgs;
     private final String[] mEnv;
 
+    /** 一个Session
+     *
+     * @param shellPath, 运行路径, exetuablePath
+     * @param cwd, change work dir
+     * @param args, arguments,
+     * @param env, 环境变量, env
+     * @param changeCallback, 回调TermuxService,
+     */
     public TerminalSession(String shellPath, String cwd, String[] args, String[] env, SessionChangedCallback changeCallback) {
         mChangeCallback = changeCallback;
 

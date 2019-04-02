@@ -401,11 +401,14 @@ public final class TerminalView extends View {
             }
             mTopRow = 0;
         }
+        //mTermSession.write("hello");
 
         mEmulator.clearScrollCounter();
 
+
         invalidate();
         if (mAccessibilityEnabled) setContentDescription(getText());
+
     }
 
     /**

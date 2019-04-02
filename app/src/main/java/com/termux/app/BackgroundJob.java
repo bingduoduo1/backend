@@ -21,6 +21,7 @@ import java.util.List;
 
 /**
  * @cn-annotator butub
+ * TermuxService.createTermSession() 调用
  * 后台工作
  */
 public final class BackgroundJob {
@@ -98,7 +99,7 @@ public final class BackgroundJob {
         };
     }
 
-    public static String[] buildEnvironment(boolean failSafe, String cwd) {
+    public static String[] buildEnvironment(boolean failSafe, String cwd) {//得到环境变量String[]
         new File(TermuxService.HOME_PATH).mkdirs();
 
         if (cwd == null) cwd = TermuxService.HOME_PATH;
@@ -140,7 +141,7 @@ public final class BackgroundJob {
         }
     }
 
-    static String[] setupProcessArgs(String fileToExecute, String[] args) {
+    static String[] setupProcessArgs(String fileToExecute, String[] args) {//寻找需要运行程序的解释器？
         // The file to execute may either be:
         // - An elf file, in which we execute it directly.
         // - A script file without shebang, which we execute with our standard shell $PREFIX/bin/sh instead of the
@@ -190,7 +191,7 @@ public final class BackgroundJob {
         List<String> result = new ArrayList<>();
         if (interpreter != null) result.add(interpreter);
         result.add(fileToExecute);
-        if (args != null) Collections.addAll(result, args);
+        if (args != null) Collections.addAll(result, args);//把args全都扔到result中
         return result.toArray(new String[0]);
     }
 
