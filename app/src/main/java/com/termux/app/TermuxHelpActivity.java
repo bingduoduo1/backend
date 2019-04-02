@@ -15,7 +15,7 @@ import android.widget.RelativeLayout;
 /** Basic embedded browser for viewing help pages. */
 
 /**
- * ＠butub
+ * @cn-annotator butub
  * 嵌入的浏览器用来浏览帮助页面
  * 但我并没有找到帮助页面
  */

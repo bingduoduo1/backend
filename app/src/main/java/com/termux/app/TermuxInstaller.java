@@ -50,7 +50,7 @@ import java.util.zip.ZipInputStream;
 
 
 /**
- * @author butub
+ * @cn-annotator butub
  * 安装 Ｔermux 启动安装的包　
  * 1. 如果　$PREFIX存在,　默认是正确的.这需要我们正确执行如下的步骤
  * 2.一个进度对话框显示"Installing..."

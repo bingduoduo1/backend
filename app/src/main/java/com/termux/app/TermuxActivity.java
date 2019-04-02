@@ -61,7 +61,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Properties;
+import java.util.Properties;//java 配置文件
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -84,12 +84,13 @@ import androidx.viewpager.widget.ViewPager;
 
 
 /**
- * @author butub
+ * @cn-annotator butub
  * important!
  * 这个活动控制terminal 模拟器
  */
 public final class TermuxActivity extends Activity implements ServiceConnection {
 
+    //长按视图弹出上下文菜单
     private static final int CONTEXTMENU_SELECT_URL_ID = 0; // select url id
     private static final int CONTEXTMENU_SHARE_TRANSCRIPT_ID = 1; // share transcript id
     private static final int CONTEXTMENU_PASTE_ID = 3;              //paste id
@@ -144,7 +145,7 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
     private final BroadcastReceiver mBroadcastReceiever = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (mIsVisible) {
+            if (mIsVisible) { // 如果在前台可视
                 String whatToReload = intent.getStringExtra(RELOAD_STYLE_ACTION);
                 if ("storage".equals(whatToReload)) {
                     if (ensureStoragePermissionGranted())
@@ -152,7 +153,7 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
                     return;
                 }
                 checkForFontAndColors();
-                mSettings.reloadFromProperties(TermuxActivity.this);
+                mSettings.reloadFromProperties(TermuxActivity.this);//加载配置属性
 
                 if (mExtraKeysView != null) {
                     mExtraKeysView.reload(mSettings.mExtraKeys, ExtraKeysView.defaultCharDisplay);
@@ -211,7 +212,7 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
     }
 
     @Override
-    public void onCreate(Bundle bundle) {
+    public void onCreate(Bundle bundle) {//todo
         super.onCreate(bundle);
 
         mSettings = new TermuxPreferences(this);
@@ -246,7 +247,7 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
 
             @NonNull
             @Override
-            public Object instantiateItem(@NonNull ViewGroup collection, int position) {//实例化
+            public Object instantiateItem(@NonNull ViewGroup collection, int position) {//实例化, positon
                 LayoutInflater inflater = LayoutInflater.from(TermuxActivity.this); //布局填充
                 View layout;
                 if (position == 0) {
@@ -278,7 +279,7 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
             public void destroyItem(@NonNull ViewGroup collection, int position, @NonNull Object view) {
                 collection.removeView((View) view);
             }
-        });
+        });// end view-adapter
 
         viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
@@ -308,12 +309,13 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
             getDrawer().closeDrawers();
         });
 
+
         findViewById(R.id.toggle_keyboard_button).setOnLongClickListener(v -> {
             toggleShowExtraKeys();
             return true;
         });
 
-        registerForContextMenu(mTerminalView);
+        registerForContextMenu(mTerminalView);//设置上下文菜单
 
         Intent serviceIntent = new Intent(this, TermuxService.class);//启动服务
         // Start the service and make it run regardless of who is bound to it:
@@ -325,7 +327,9 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
         checkForFontAndColors();
 
         mBellSoundId = mBellSoundPool.load(this, R.raw.bell, 1);
-    }//end onCreate
+
+    }
+    //end onCreate
 
     void toggleShowExtraKeys() {
         final ViewPager viewPager = findViewById(R.id.viewpager);
@@ -338,7 +342,7 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
     }
 
     /**
-     * 重写ServiceConnecction接口的方法onServiceConnected, onCreate中绑定服务后会启动这个回调方法
+     * 重写ServiceConnecction接口的方法onServiceConnected, onCreate中绑定服务后会启动这个回调方法?
      */
     /**
      * Part of the {@link ServiceConnection} interface. The service is bound with

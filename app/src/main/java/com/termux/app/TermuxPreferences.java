@@ -24,7 +24,7 @@ import java.util.Properties;//读取java 配置文件
 import androidx.annotation.IntDef;
 
 /**
- * @author butub
+ * @cn-annotator butub
  * 处理配置文件,并且配置拓展键盘和字体大小
  */
 

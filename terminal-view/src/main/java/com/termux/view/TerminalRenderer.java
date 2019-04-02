@@ -18,7 +18,7 @@ import com.termux.terminal.WcWidth;
  */
 
 /**
- * @author butub
+ * @cn-annotator butub
  * 把　TermalEmulator 渲染成　Canvas
  */
 

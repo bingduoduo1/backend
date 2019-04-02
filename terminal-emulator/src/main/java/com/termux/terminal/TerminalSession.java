@@ -30,10 +30,10 @@ import java.util.UUID;
  */
 
 /**
- * @author butub
+ * @cn-annotator butub
  *  Session, 存在一个实现terminal interface 的进程 process
- *  构造器会运行一个子进程， 调用upateSize 获得Size后，启动模拟器， 并且创建新的线程区处理subprocess I/O
- *  在主线程中有所有terminal 模拟和回调方法
+ *  构造器会运行一个子进程， 调用upateSize 获得Size后，启动模拟器， 并且创建新的线程去处理subprocess I/O
+ *  在主线程中有所有的terminal 模拟和回调方法
  *  使用 finishIfRunning方法 可以强制退出子进程
  *  NOTE: 会话可能会在EmulatorView关闭后仍然存活，所以需要对于回调方法小心处理。
  *
@@ -194,7 +194,7 @@ public final class TerminalSession extends TerminalOutput {
 
         final FileDescriptor terminalFileDescriptorWrapped = wrapFileDescriptor(mTerminalFileDescriptor);
 
-        new Thread("TermSessionInputReader[pid=" + mShellPid + "]") {
+        new Thread("TermSessionInputReader[pid=" + mShellPid + "]") {// 读线程
             @Override
             public void run() {
                 try (InputStream termIn = new FileInputStream(terminalFileDescriptorWrapped)) {
@@ -211,7 +211,7 @@ public final class TerminalSession extends TerminalOutput {
             }
         }.start();
 
-        new Thread("TermSessionOutputWriter[pid=" + mShellPid + "]") {
+        new Thread("TermSessionOutputWriter[pid=" + mShellPid + "]") {//写线程
             @Override
             public void run() {
                 final byte[] buffer = new byte[4096];

@@ -33,7 +33,7 @@ import java.util.LinkedList;
  */
 
 /**
- * ＠butub
+ * @cn-annotator butub
  * 这是个document provider 用来给别的app提供$HOME目录中的文件用的
  * document provider 和 ACTION_GET_CONTENT intent 应该是互斥的,不然在Ｓystem Picker UI中就会看到
  * 两个指向相同文件的途径,这会让用户感到困惑

@@ -31,7 +31,7 @@ import com.termux.view.TerminalView;        //terminal view
  */
 
 /**
- * @author butub
+ * @cn-annotator butub
  * 拓展的键盘项　Esc Ctr ALt
  */
 public final class ExtraKeysView extends GridLayout {

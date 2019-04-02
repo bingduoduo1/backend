@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
+//@cn-annotator butub
+
 public class TermuxFileReceiverActivity extends Activity {
 
     static final String TERMUX_RECEIVEDIR = TermuxService.FILES_PATH + "/home/downloads";

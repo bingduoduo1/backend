@@ -1,6 +1,10 @@
 package com.termux.terminal;
 
 /** Current terminal colors (if different from default). */
+
+/**
+ * 当前termianl 的颜色
+ */
 public final class TerminalColors {
 
     /** Static data - a bit ugly but ok for now. */

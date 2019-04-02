@@ -19,7 +19,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 
 /**
- * @author butub
+ * @cn-annotator butub
  *
  */
 public final class TermuxViewClient implements TerminalViewClient {

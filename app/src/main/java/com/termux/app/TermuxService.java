@@ -42,7 +42,7 @@ import java.util.List;
  */
 
 /**
- * @author butub
+ * @cn-annotator butub
  * 开启一个服务　控制多个termial　Session, 服务在前台展示所有session,他们仍然在run没有被终止
  * 用户通过TermuxActivity和Session交互,但这个服务可能会比Activity更加持久（长生不老outlive）,
  * 这种情况下，用户可以稍后重启termuxActivity来重新连接这些Session
@@ -88,7 +88,7 @@ public final class TermuxService extends Service implements SessionChangedCallba
      * Note that this list is observed by {@link TermuxActivity#mListViewAdapter}, so any changes must be made on the UI
      * thread and followed by a call to {@link ArrayAdapter#notifyDataSetChanged()} }.
      */
-    final List<TerminalSession> mTerminalSessions = new ArrayList<>();
+    final List<TerminalSession> mTerminalSessions = new ArrayList<>();// 后台服务中的所有Session
 
     final List<BackgroundJob> mBackgroundTasks = new ArrayList<>();
 

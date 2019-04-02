@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 
 
 /**
- * @author butub
+ * @cn-annotator butub
  * important!
  * 实现会话
  */

@@ -20,7 +20,7 @@ import java.util.List;
  */
 
 /**
- * @author butub
+ * @cn-annotator butub
  * 后台工作
  */
 public final class BackgroundJob {

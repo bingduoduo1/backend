@@ -39,7 +39,7 @@ import com.termux.terminal.TerminalSession;
 /** View displaying and interacting with a {@link TerminalSession}. */
 
 /**
- * @author butub
+ * @cn-annotator butub
  * 用于显示的view,和对应的TerminalSession交互
  */
 
@@ -49,7 +49,7 @@ public final class TerminalView extends View {
     private static final boolean LOG_KEY_EVENTS = false;
 
     /** The currently displayed terminal session, whose emulator is {@link #mEmulator}. */
-    TerminalSession mTermSession;// 当前 Terminal Session
+    TerminalSession mTermSession;// 当前 Terminal Session public??
     /** Our terminal emulator whose session is {@link #mTermSession}. */
     TerminalEmulator mEmulator; // 当前Session 对应的　Emulator
 
