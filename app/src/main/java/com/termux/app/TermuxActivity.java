@@ -555,7 +555,7 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
 
         // The current terminal session may have changed while being away, force
         // a refresh of the displayed terminal:
-        mTerminalView.onScreenUpdated();// 可以在onStart中泰纳一下需要监听的动作
+        mTerminalView.onScreenUpdated();// 可以在onStart中添加一些需要监听的动作
         if(mTerminalView!=null && getCurrentTermSession()!=null){// 没有用
             TerminalSession ss = getCurrentTermSession();
             Toast.makeText(this, "hello", Toast.LENGTH_SHORT).show();
