@@ -647,7 +647,7 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
     }
 
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {//上下文菜单，长按触发，Override
         TerminalSession currentSession = getCurrentTermSession();
         if (currentSession == null) return;
 
@@ -724,7 +724,7 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
     }
 
     @Override
-    public boolean onContextItemSelected(MenuItem item) {
+    public boolean onContextItemSelected(MenuItem item) {//上下文选项对应的具体动作
         TerminalSession session = getCurrentTermSession();
 
         switch (item.getItemId()) {
@@ -846,7 +846,7 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
         }
     }
 
-    private void clearTemporaryDirectory() {
+    private void clearTemporaryDirectory() {//清空tmp目录，删除再创建
         if (mTermService.getSessions().size() == 0 && !mTermService.isWakelockEnabled()) {
             File termuxTmpDir = new File(TermuxService.PREFIX_PATH + "/tmp");
             if (termuxTmpDir.exists()) {

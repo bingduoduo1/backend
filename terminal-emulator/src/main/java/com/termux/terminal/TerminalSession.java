@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
-import java.util.UUID;
+import java.util.UUID;//Universally Unique Identifier 通用唯一标识码
 
 /**
  * A terminal session, consisting of a process coupled to a terminal interface.
@@ -36,7 +36,6 @@ import java.util.UUID;
  *  在主线程中有所有的terminal 模拟和回调方法
  *  使用 finishIfRunning方法 可以强制退出子进程
  *  NOTE: 会话可能会在EmulatorView关闭后仍然存活，所以需要对于回调方法小心处理。
- *
  */
 public final class TerminalSession extends TerminalOutput {
 
@@ -161,7 +160,7 @@ public final class TerminalSession extends TerminalOutput {
      * @param cwd, change work dir
      * @param args, arguments,
      * @param env, 环境变量, env
-     * @param changeCallback, 回调TermuxService,
+     * @param changeCallback, 回调，TermuxService
      */
     public TerminalSession(String shellPath, String cwd, String[] args, String[] env, SessionChangedCallback changeCallback) {
         mChangeCallback = changeCallback;
@@ -197,6 +196,7 @@ public final class TerminalSession extends TerminalOutput {
         mEmulator = new TerminalEmulator(this, columns, rows, /* transcript= */2000);
 
         int[] processId = new int[1]; //开启子进程
+        // 注意JNI, 看起来蛮有趣的， 这个
         mTerminalFileDescriptor = JNI.createSubprocess(mShellPath, mCwd, mArgs, mEnv, processId, rows, columns);
         mShellPid = processId[0];
 
@@ -204,12 +204,12 @@ public final class TerminalSession extends TerminalOutput {
 
         new Thread("TermSessionInputReader[pid=" + mShellPid + "]") {// 读线程
             @Override
-            public void run() {
+            public void run() {// 注意： termainlFileDescriptorWrapped
                 try (InputStream termIn = new FileInputStream(terminalFileDescriptorWrapped)) {
                     final byte[] buffer = new byte[4096];
                     while (true) {
                         int read = termIn.read(buffer);
-                        if (read == -1) return;
+                        if (read == -1) return; // 不停地扫TermIn，然后写入Process 2 Termainl Byte Queue
                         if (!mProcessToTerminalIOQueue.write(buffer, 0, read)) return;
                         mMainThreadHandler.sendEmptyMessage(MSG_NEW_INPUT);
                     }
@@ -222,9 +222,9 @@ public final class TerminalSession extends TerminalOutput {
         new Thread("TermSessionOutputWriter[pid=" + mShellPid + "]") {//写线程
             @Override
             public void run() {
-                final byte[] buffer = new byte[4096];
+                final byte[] buffer = new byte[4096];// Only a file Stream
                 try (FileOutputStream termOut = new FileOutputStream(terminalFileDescriptorWrapped)) {
-                    while (true) {
+                    while (true) {// 不停地去扫描 Terminal 2 process 的缓冲 Byte Queue
                         int bytesToWrite = mTerminalToProcessIOQueue.read(buffer, true);
                         if (bytesToWrite == -1) return;
                         termOut.write(buffer, 0, bytesToWrite);
@@ -238,15 +238,12 @@ public final class TerminalSession extends TerminalOutput {
         new Thread("TermSessionWaiter[pid=" + mShellPid + "]") {
             @Override
             public void run() {
-                int processExitCode = JNI.waitFor(mShellPid);
+                int processExitCode = JNI.waitFor(mShellPid);// JNI
                 mMainThreadHandler.sendMessage(mMainThreadHandler.obtainMessage(MSG_PROCESS_EXITED, processExitCode));
             }
         }.start();
 
-    }
-    /**
-     *
-     */
+    }//end initEmulator
 
     /** Write data to the shell process. */
     @Override
