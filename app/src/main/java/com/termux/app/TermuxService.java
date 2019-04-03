@@ -308,7 +308,7 @@ public final class TermuxService extends Service implements SessionChangedCallba
 
         TerminalSession session = new TerminalSession(executablePath, cwd, args, env, this);
         mTerminalSessions.add(session);//添加新的Session
-        updateNotification();//更新Toast
+        updateNotification();//更新SerivceNotification?
         return session;
     }
 

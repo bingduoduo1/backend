@@ -27,6 +27,11 @@ import java.util.Stack;
  * html - document for konsole - accessible!</li>
  * </ul>
  */
+
+/**
+ * @butub
+ * 这个用于把文本显示到屏幕上,　包含了每个独立终端的信息,　模拟一个X-Window　System xterm terminal的子集
+ */
 public final class TerminalEmulator {
 
     /** Log unknown or unimplemented escape sequences received from the shell process. */
@@ -397,11 +402,11 @@ public final class TerminalEmulator {
 
     /**
      * Accept bytes (typically from the pseudo-teletype) and process them.
-     *
+     *接受并处理需要显示在屏幕上的序列
      * @param buffer a byte array containing the bytes to be processed
      * @param length the number of bytes in the array to process
      */
-    public void append(byte[] buffer, int length) {
+    public void append(byte[] buffer, int length) {// todo
         for (int i = 0; i < length; i++)
             processByte(buffer[i]);
     }
@@ -2287,6 +2292,7 @@ public final class TerminalEmulator {
     }
 
     /** Reset terminal state so user can interact with it regardless of present state. */
+    /** 重置终端状态,使得用户可以和终端交互,regardless of present state*/
     public void reset() {
         mCursorStyle = CURSOR_STYLE_BLOCK;
         mArgIndex = 0;

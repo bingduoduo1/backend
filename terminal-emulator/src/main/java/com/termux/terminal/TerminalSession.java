@@ -86,12 +86,13 @@ public final class TerminalSession extends TerminalOutput {
     /**
      * A queue written to from a separate thread when the process outputs, and read by main thread to process by
      * terminal emulator.
-     * 一个用
+     * 一个用于与进程交互的io缓冲区, 通过线程监听进程的输出,写入到这个缓冲区,然后在main线程中处理
      */
     final ByteQueue mProcessToTerminalIOQueue = new ByteQueue(4096);
     /**
      * A queue written to from the main thread due to user interaction, and read by another thread which forwards by
      * writing to the {@link #mTerminalFileDescriptor}.
+     * 一个用于与进程交互的io缓冲区, 通过线程监听用户输入,写入到进程的对应文件中
      */
     final ByteQueue mTerminalToProcessIOQueue = new ByteQueue(4096);
     /** Buffer to write translate code points into utf8 before writing to mTerminalToProcessIOQueue */
@@ -101,7 +102,7 @@ public final class TerminalSession extends TerminalOutput {
     final SessionChangedCallback mChangeCallback;
 
     /** The pid of the shell process. 0 if not started and -1 if finished running. */
-    int mShellPid;
+    int mShellPid;//shell 对应的进程的id, 0->未启动,　-1->结束运行
 
     /** The exit status of the shell process. Only valid if ${@link #mShellPid} is -1. */
     int mShellExitStatus;
@@ -115,19 +116,20 @@ public final class TerminalSession extends TerminalOutput {
     /** Set by the application for user identification of session, not by terminal. */
     public String mSessionName;
 
+    // pass:Handler 是异步通信的类，主要接受子线程发送的数据, 并用此数据配合主线程更新UI.
     @SuppressLint("HandlerLeak")
-    final Handler mMainThreadHandler = new Handler() {
+    final Handler mMainThreadHandler = new Handler() {//main Thread　消息处理器,todo, 显示到页面
         final byte[] mReceiveBuffer = new byte[4 * 1024];
 
         @Override
         public void handleMessage(Message msg) {
-            if (msg.what == MSG_NEW_INPUT && isRunning()) {
+            if (msg.what == MSG_NEW_INPUT && isRunning()) {//新的输入
                 int bytesRead = mProcessToTerminalIOQueue.read(mReceiveBuffer, false);
                 if (bytesRead > 0) {
                     mEmulator.append(mReceiveBuffer, bytesRead);
                     notifyScreenUpdate();
                 }
-            } else if (msg.what == MSG_PROCESS_EXITED) {
+            } else if (msg.what == MSG_PROCESS_EXITED) {//进程退出了
                 int exitCode = (Integer) msg.obj;
                 cleanupResources(exitCode);
                 mChangeCallback.onSessionFinished(TerminalSession.this);
@@ -171,9 +173,11 @@ public final class TerminalSession extends TerminalOutput {
         this.mEnv = env;
     }// Constructor
 
-    /** Inform the attached pty of the new size and reflow or initialize the emulator. */
-    public void updateSize(int columns, int rows) {
-        if (mEmulator == null) {
+    /** Inform the attached pty of the new size and reflow or initialize the emulator.
+     *
+     * */
+    public void updateSize(int columns, int rows) {//在何处调用？
+        if (mEmulator == null) {//没有对应的模拟器,就创建一个
             initializeEmulator(columns, rows);
         } else {
             JNI.setPtyWindowSize(mTerminalFileDescriptor, rows, columns);

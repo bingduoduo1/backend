@@ -7,6 +7,7 @@ import java.util.Arrays;
  * history.
  * <p>
  * See {@link #externalToInternalRow(int)} for how to map from logical screen rows to array indices.
+ * 这是我们的屏幕
  */
 public final class TerminalBuffer {
 
@@ -32,7 +33,7 @@ public final class TerminalBuffer {
         mColumns = columns;
         mTotalRows = totalRows;
         mScreenRows = screenRows;
-        mLines = new TerminalRow[totalRows];
+        mLines = new TerminalRow[totalRows];// TermainRow是一行
 
         blockSet(0, 0, columns, screenRows, ' ', TextStyle.NORMAL);
     }

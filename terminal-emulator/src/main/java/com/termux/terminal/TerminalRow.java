@@ -6,6 +6,7 @@ import java.util.Arrays;
  * A row in a terminal, composed of a fixed number of cells.
  * <p>
  * The text in the row is stored in a char[] array, {@link #mText}, for quick access during rendering.
+ * 终端里面的一行，　由固定单位个数的cell组成
  */
 public final class TerminalRow {
 
