@@ -4,17 +4,17 @@ import java.util.ArrayList;
 
 public abstract class InputActionHelper {
 
-    private static ArrayList<String> mTokenList = new ArrayList<>() {{
+    private static ArrayList<String> mTokenList = new ArrayList<String>() {{
         add("(");
         add(")");
     }};
 
-    private static ArrayList<String> mShellKeyWordList = new ArrayList<>() {{
+    private static ArrayList<String> mShellKeyWordList = new ArrayList<String>() {{
         add("ls");
         add("cd");
         add("python");
     }};
-    private static ArrayList<String> mPythonKeyWordList = new ArrayList<>() {{
+    private static ArrayList<String> mPythonKeyWordList = new ArrayList<String>() {{
         add("import");
         add("math");
         add("sin");

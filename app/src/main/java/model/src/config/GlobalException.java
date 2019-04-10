@@ -1,6 +1,6 @@
 package model.src.config;
 
-import static config.ExceptionLevel.GLOBAL;
+import static model.src.config.ExceptionLevel.GLOBAL;
 
 public class GlobalException extends Exception {
     protected ExceptionLevel mExceptionLevel;
