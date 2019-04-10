@@ -1,4 +1,4 @@
-package dictionary.model;
+package model.src.dictionary.model;
 
 public abstract class BaseAction {
     private ActionType mActionType;

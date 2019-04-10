@@ -71,6 +71,12 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import model.src.config.*;
+import model.src.dictionary.*;
+
+
+
+
 /**
  * A terminal emulator activity.
  * <p/>
@@ -303,11 +309,13 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
         }); //failsafe?故障保护?
 
         //todo 这个IMM 可能需要被替换 或者 关闭
+
         findViewById(R.id.toggle_keyboard_button).setOnClickListener(v -> {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
             getDrawer().closeDrawers();
         });
+
 
 
         findViewById(R.id.toggle_keyboard_button).setOnLongClickListener(v -> {
@@ -327,6 +335,7 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
         checkForFontAndColors();
 
         mBellSoundId = mBellSoundPool.load(this, R.raw.bell, 1);
+
 
     }
     //end onCreate

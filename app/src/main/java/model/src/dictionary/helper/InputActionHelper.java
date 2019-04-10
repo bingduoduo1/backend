@@ -1,4 +1,4 @@
-package dictionary.helper;
+package model.src.dictionary.helper;
 
 import java.util.ArrayList;
 

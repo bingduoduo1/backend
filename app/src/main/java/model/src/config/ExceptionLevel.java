@@ -1,4 +1,4 @@
-package config;
+package model.src.config;
 
 public enum ExceptionLevel {
     GLOBAL,

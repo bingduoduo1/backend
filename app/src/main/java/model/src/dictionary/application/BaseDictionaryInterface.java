@@ -1,4 +1,4 @@
-package dictionary.application;
+package model.src.dictionary.application;
 
 public interface BaseDictionaryInterface {
 

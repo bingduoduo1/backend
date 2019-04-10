@@ -1,7 +1,7 @@
-package dictionary.exception;
+package model.src.dictionary.exception;
 
-import config.ExceptionLevel;
-import config.GlobalException;
+import model.src.config.ExceptionLevel;
+import model.src.config.GlobalException;
 
 public class DictionaryException extends GlobalException {
     public DictionaryException() {

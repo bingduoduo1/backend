@@ -1,4 +1,4 @@
-package dictionary.model;
+package model.src.dictionary.model;
 
 public enum ExecutePlaceType {
     EDITOR,

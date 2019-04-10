@@ -1,4 +1,4 @@
-package config;
+package model.src.config;
 
 import static config.ExceptionLevel.GLOBAL;
 

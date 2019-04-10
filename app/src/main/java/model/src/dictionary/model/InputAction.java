@@ -1,9 +1,9 @@
-package dictionary.model;
+package model.src.dictionary.model;
 
-import dictionary.exception.DictionaryException;
-import dictionary.exception.NotMatchActionTypeExpection;
+import model.src.dictionary.exception.DictionaryException;
+import model.src.dictionary.exception.NotMatchActionTypeExpection;
 
-import static dictionary.helper.InputActionHelper.inputActionContentCheck;
+import static model.src.dictionary.helper.InputActionHelper.inputActionContentCheck;
 
 public class InputAction extends BaseAction {
     private String mContent;
