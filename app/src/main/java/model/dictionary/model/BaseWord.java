@@ -1,10 +1,10 @@
 package model.dictionary.model;
 
-public class BaseWord {
+public abstract class BaseWord {
     private final String mRawData;
     private final NatureLanguageType mNatureType;
 
-    BaseWord(String rawData, NatureLanguageType natureType) {
+    public BaseWord(String rawData, NatureLanguageType natureType) {
         mRawData = rawData;
         mNatureType = natureType;
     }
