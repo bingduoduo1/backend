@@ -19,6 +19,10 @@ import com.iflytek.cloud.SpeechError;
 import com.iflytek.cloud.SpeechRecognizer;
 import com.iflytek.speech.util.JsonParser;
 
+import model.dictionary.application.GlobalDictionary;
+import model.dictionary.application.LookUpInterface;
+import model.dictionary.exception.DictionaryException;
+
 import static android.content.Context.MODE_PRIVATE;
 
 
@@ -36,13 +40,15 @@ public class SpeechRecognitionIflytek implements SpeechRecognitionInterface{
     private String mCLoudGrammar = null;
     private Activity mCallerActivity;
     private String mGrammarPath;
-    private String mActionResult;
+    private String mParserResult;
+    private LookUpInterface mLookUpHandle;
 
 
     public SpeechRecognitionIflytek(Activity callerActivity, String grammarPath){
         mCallerActivity = callerActivity;
         mGrammarPath = grammarPath;
-        mActionResult = "";
+        mParserResult = "";
+        mLookUpHandle = GlobalDictionary.createDictionary();
         this.initSpeechRecognizer();
         this.SetParam();
     }
@@ -124,10 +130,7 @@ public class SpeechRecognitionIflytek implements SpeechRecognitionInterface{
                     parser_result = JsonParser.parseLocalGrammarResult(origin_result);
                 }
                 Log.d(LOG_TAG, "parser result: "+parser_result);
-                //TODO dictionary map
-                String action_result;
-                action_result = parser_result;
-                mActionResult += action_result;
+                mParserResult += parser_result;
             } else {
                 Log.d(LOG_TAG, "recognizer result is null");
             }
@@ -207,10 +210,16 @@ public class SpeechRecognitionIflytek implements SpeechRecognitionInterface{
     }
 
     public String getAction() {
-        Log.d(LOG_TAG, "action result" + mActionResult);
-        String ret = new String(mActionResult);
         this.stopRecognize();
-        mActionResult = "";
+        Log.d(LOG_TAG, "total parser result" + mParserResult);
+        String ret = "";
+        try {
+            mLookUpHandle.exactLookUpWord(mParserResult, ret);
+        } catch (DictionaryException e){
+            e.printStackTrace();
+        }
+        mParserResult = "";
+        Log.d(LOG_TAG, "action result" + ret);
         return ret;
     }
 
