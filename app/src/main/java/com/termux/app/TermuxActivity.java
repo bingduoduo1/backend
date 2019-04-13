@@ -71,10 +71,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import model.src.config.*;
-import model.src.dictionary.*;
-
-
+import model.config.*;
+import model.dictionary.model.*;
 
 
 /**

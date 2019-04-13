@@ -1,1 +1,1 @@
-include ':app', ':terminal-emulator', ':terminal-view', ':speechDemo'
+include ':app', ':terminal-emulator', ':terminal-view'
