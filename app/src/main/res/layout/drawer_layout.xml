@@ -1,22 +1,35 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:fitsSystemWindows="true">
 
+    <Button
+        android:id="@+id/btn_voice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="162dp"
+        android:layout_marginBottom="129dp"
+        android:text="Voice" />
+
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
-        android:layout_alignParentTop="true"
+        android:layout_height="match_parent"
         android:layout_above="@+id/viewpager"
-        android:layout_height="match_parent">
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="-731dp">
 
         <com.termux.view.TerminalView
             android:id="@+id/terminal_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginRight="3dp"
             android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
             android:focusableInTouchMode="true"
             android:scrollbarThumbVertical="@drawable/terminal_scroll_shape"
             android:scrollbars="vertical" />
@@ -28,9 +41,9 @@
             android:layout_gravity="start"
             android:background="@android:color/white"
             android:choiceMode="singleChoice"
+            android:descendantFocusability="blocksDescendants"
             android:divider="@android:color/transparent"
             android:dividerHeight="0dp"
-            android:descendantFocusability="blocksDescendants"
             android:orientation="vertical">
 
             <ListView

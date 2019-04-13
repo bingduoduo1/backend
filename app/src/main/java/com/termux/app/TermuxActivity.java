@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Application;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ClipData;
@@ -14,6 +15,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;//后台服务连接
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -23,6 +25,7 @@ import android.media.SoundPool;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.IBinder;
 import android.os.Vibrator;
 import android.text.SpannableString;
@@ -36,16 +39,27 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.content.Context;
 
+import com.iflytek.cloud.ErrorCode;
+import com.iflytek.cloud.InitListener;
+import com.iflytek.cloud.SpeechConstant;
+import com.iflytek.cloud.SpeechRecognizer;
+import com.iflytek.cloud.SpeechUtility;
+import com.iflytek.speech.util.FucUtil;
+import com.iflytek.voicedemo.AsrDemo;
+import com.iflytek.voicedemo.SpeechRecognitionIflytek;
 import com.termux.R;
 import com.termux.terminal.EmulatorDebug;
 import com.termux.terminal.TerminalColors;
@@ -67,13 +81,29 @@ import java.util.regex.Pattern;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import model.config.*;
 import model.dictionary.model.*;
+import android.view.View.OnClickListener;
 
+import com.iflytek.cloud.ErrorCode;
+import com.iflytek.cloud.GrammarListener;
+import com.iflytek.cloud.InitListener;
+import com.iflytek.cloud.LexiconListener;
+import com.iflytek.cloud.RecognizerListener;
+import com.iflytek.cloud.RecognizerResult;
+import com.iflytek.cloud.SpeechConstant;
+import com.iflytek.cloud.SpeechError;
+import com.iflytek.cloud.SpeechRecognizer;
+import com.iflytek.speech.util.JsonParser;
+
+
+
+import static android.content.ContentValues.TAG;
 
 /**
  * A terminal emulator activity.
@@ -92,7 +122,8 @@ import model.dictionary.model.*;
  * important!
  * 这个活动控制terminal 模拟器
  */
-public final class TermuxActivity extends Activity implements ServiceConnection {
+public final class TermuxActivity extends Activity implements ServiceConnection , OnClickListener {
+
 
     //长按视图弹出上下文菜单
     private static final int CONTEXTMENU_SELECT_URL_ID = 0; // select url id
@@ -140,6 +171,45 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
      * time, so if the session causing a change is not in the foreground it should probably be treated as background.
      */
     boolean mIsVisible;
+
+
+    // 冰多多
+    private static final String LOG_TAG = SpeechRecognitionIflytek.class.getSimpleName();
+    private static final String KEY_GRAMMAR_ABNF_ID = "grammar_abnf_id";
+    private static final String GRAMMAR_TYPE_ABNF = "abnf";
+    private static final String GRAMMAR_TYPE_BNF = "bnf";
+    private static final String mCloud = "cloud";
+    private static Context context;
+    private final String mEngineType = SpeechConstant.TYPE_CLOUD;
+
+    private SpeechRecognizer mRecognizer;
+    private SharedPreferences mSharedPreferences;
+    private String mCLoudGrammar = null;
+    private Activity mCallerActivity;
+    private String mGrammarPath="grammar_sample.abnf";
+    private String mActionResult;
+    private InitListener mInitListener = new InitListener(){
+
+        @Override
+        public void onInit(int code) {
+            String info;
+            if (code != ErrorCode.SUCCESS) {
+                info = "init fail, error code: "+code;
+                //TODO
+            } else {
+                info = "init success";
+            }
+            Log.d(LOG_TAG, info);
+        }
+    };
+    // 语法、词典临时变量
+    String mContent;
+    // 函数调用返回值
+    int ret = 0;
+
+    // end 冰多多
+
+
 
     final SoundPool mBellSoundPool = new SoundPool.Builder().setMaxStreams(1).setAudioAttributes(
         new AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
@@ -215,6 +285,8 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
         }
     }
 
+
+
     @Override
     public void onCreate(Bundle bundle) {//todo
         super.onCreate(bundle);
@@ -236,8 +308,8 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
         //分页
         final ViewPager viewPager = findViewById(R.id.viewpager);//androidx.viewpager.widget.ViewPager
         if (mSettings.mShowExtraKeys) viewPager.setVisibility(View.VISIBLE);
-        
-        
+
+
         ViewGroup.LayoutParams layoutParams = viewPager.getLayoutParams();
         layoutParams.height = layoutParams.height * mSettings.mExtraKeys.length;
         viewPager.setLayoutParams(layoutParams);
@@ -319,7 +391,6 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
         });
 
 
-
         findViewById(R.id.toggle_keyboard_button).setOnLongClickListener(v -> {
             toggleShowExtraKeys();
             return true;
@@ -339,8 +410,291 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
         mBellSoundId = mBellSoundPool.load(this, R.raw.bell, 1);
 
 
+
+        // todo main
+        SpeechUtility.createUtility(this, "appid=5ca3663d");
+        this.requestPermissions();
+
+        mActionResult = "";
+        mRecognizer = SpeechRecognizer.createRecognizer(TermuxActivity.this, mInitListener);
+        mCLoudGrammar = FucUtil.readFile(this,mGrammarPath,"utf-8");//得到语法文件
+        Log.e(TAG, "onCreate:  "+mGrammarPath);
+        if(null == mCLoudGrammar){
+            Log.e("TermuxActivity", "onCreate: mCloundGrammar is Null");
+        }
+        Log.e(TAG, "onCreate: "+this+ " " + mInitListener);
+
+        mSharedPreferences = this.getSharedPreferences(getPackageName(),	MODE_PRIVATE);
+
+        //if(null == mRecognizer){
+        //    Log.e("TermuxActivity", "onCreate:  Null!!!");
+        //}
+        //mRecognizer.setParameter(SpeechConstant.ENGINE_TYPE, mEngineType);
+
+        //this.initSpeechRecognizer();
+        //this.SetParam();
+        //mAsr = SpeechRecognizer.createRecognizer(TermuxActivity.this, mInitListener);
+        //mCloudGrammar = FucUtil.readFile(this,"grammar_sample.abnf","utf-8");
+
+
+        //mSharedPreferences = getSharedPreferences(getPackageName(),	MODE_PRIVATE);
+
+        //SpeechRecognitionIflytek reconition = new SpeechRecognitionIflytek( "grammar_sample.abnf");
+
+        Button btn_voice = (Button) findViewById(R.id.btn_voice);
+
+        btn_voice.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+
+                    case MotionEvent.ACTION_DOWN: {
+                        //reconition.cancelRecognize();
+                        //按住事件发生后执行代码的区域
+                        mContent = new String(mCLoudGrammar);
+                        mRecognizer.setParameter(SpeechConstant.ENGINE_TYPE, mEngineType);
+                        mRecognizer.setParameter(SpeechConstant.TEXT_ENCODING,"utf-8");
+                        ret = mRecognizer.buildGrammar(GRAMMAR_TYPE_ABNF, mContent, mCloudGrammarListener);
+                        if(ret != ErrorCode.SUCCESS)
+                            Log.e(TAG, "onTouch: 构建失败错误码:"+ret);
+                        if(mRecognizer!=null) {
+                            Toast.makeText(TermuxActivity.this, "Success", Toast.LENGTH_LONG).show();
+                            startRecognize();
+                        }
+                        break;
+                        // 开始识别
+                    }
+                    case MotionEvent.ACTION_MOVE: {
+                        //移动事件发生后执行代码的区域
+                        break;
+                    }
+                    case MotionEvent.ACTION_UP: {
+                        //getAction();
+                        Toast.makeText(TermuxActivity.this,getAction(),Toast.LENGTH_LONG).show();
+                        //松开事件发生后执行代码的区域
+                        break;
+                    }
+                    default:
+                        break;
+                }
+                return true;
+            }
+        });
+
     }
     //end onCreate
+    private void requestPermissions(){
+        try {
+            if (Build.VERSION.SDK_INT >= 23) {
+                int permission = ActivityCompat.checkSelfPermission(this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                if(permission!= PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this,new String[]
+                        {Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.LOCATION_HARDWARE,Manifest.permission.READ_PHONE_STATE,
+                            Manifest.permission.WRITE_SETTINGS,Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.RECORD_AUDIO,Manifest.permission.READ_CONTACTS},0x0010);
+                }
+
+                if(permission != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this,new String[] {
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_FINE_LOCATION},0x0010);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    private void initSpeechRecognizer() {
+        mRecognizer = SpeechRecognizer.createRecognizer(TermuxActivity.this, mInitListener);
+        if(mRecognizer == null){
+            Log.e("mRecognizer","NULL!!");
+        }
+        mCLoudGrammar = com.iflytek.speech.util.FucUtil.readFile(this, mGrammarPath,"utf-8");
+        //Log.e(TAG, "initSpeechRecognizer: "+ this.getPackageName());
+        mSharedPreferences = this.getSharedPreferences(this.getPackageName(),	MODE_PRIVATE);
+    }
+
+
+
+
+    //语音相关函数
+    private LexiconListener mLexiconListener = new LexiconListener() {
+        @Override
+        public void onLexiconUpdated(String lexiconId, SpeechError speechError) {
+            String info;
+            if (speechError != null) {
+                info = "lexicon update fail, error code: "+speechError.getErrorCode();
+                //TODO
+            } else {
+                info = "lexicon update success";
+            }
+            Log.d(LOG_TAG, info);
+        }
+    };
+
+    private GrammarListener mCloudGrammarListener = new GrammarListener() {
+        @Override
+        public void onBuildFinish(String grammarId, SpeechError speechError) {
+            String info;
+            if (speechError != null) {
+                info = "grammar build fail, error code: "+speechError.getErrorCode();
+            } else {
+                info = "grammar build success: (grammar ID)" + grammarId;
+            }
+            Log.d(LOG_TAG, info);
+        }
+    };
+
+    private RecognizerListener mRecognizerListener = new RecognizerListener() {
+        @Override
+        public void onVolumeChanged(int volume, byte[] data) {
+            String info = "Talking...(volume: " + volume + ", data length: " + data.length + ")";
+            Log.d(LOG_TAG, info);
+        }
+
+        @Override
+        public void onBeginOfSpeech() {
+
+        }
+
+        @Override
+        public void onEndOfSpeech() {
+
+        }
+
+        @Override
+        public void onResult(RecognizerResult recognizerResult, boolean islast) {
+            if (null != recognizerResult) {
+                String origin_result = recognizerResult.getResultString();
+                Log.d(LOG_TAG, "origin recognizer result: " + origin_result);
+                String parser_result;
+                if (mCloud.equalsIgnoreCase(mEngineType)) {
+                    parser_result = JsonParser.parseGrammarResult(origin_result);
+                } else {
+                    parser_result = JsonParser.parseLocalGrammarResult(origin_result);
+                }
+                Log.d(LOG_TAG, "parser result: "+parser_result);
+                //TODO dictionary map
+                String action_result;
+                action_result = parser_result;
+                mActionResult += action_result;
+            } else {
+                Log.d(LOG_TAG, "recognizer result is null");
+            }
+        }
+
+        @Override
+        public void onError(SpeechError speechError) {
+            if (speechError != null) {
+                String info = "recognize fail, error code: "+speechError.getErrorCode();
+                Log.d(LOG_TAG, info);
+            }
+        }
+
+        @Override
+        public void onEvent(int i, int i1, int i2, Bundle bundle) {
+
+        }
+    };
+
+    private boolean buildGrammar() {
+        int ret;
+        ret = mRecognizer.buildGrammar(GRAMMAR_TYPE_ABNF, mCLoudGrammar, mCloudGrammarListener);
+        String info;
+        if (ret != ErrorCode.SUCCESS) {
+            info = "grammar build procedure fail, error code: " + ret;
+        } else {
+            info = "grammar build procedure success";
+        }
+        Log.d(LOG_TAG, info);
+        return ret == ErrorCode.SUCCESS;
+    }
+
+    private boolean SetParam() {
+        boolean ret;
+        //mRecognizer.setParameter("engine_type", "cloud");
+        mRecognizer.setParameter(SpeechConstant.ENGINE_TYPE, mEngineType);
+        mRecognizer.setParameter(SpeechConstant.RESULT_TYPE, "json");
+        mRecognizer.setParameter(SpeechConstant.TEXT_ENCODING, "utf-8");
+        ret = this.buildGrammar();
+        if (!ret)
+            return ret;
+
+        if (mCloud.equalsIgnoreCase(mEngineType)) {
+            String grammarId = mSharedPreferences.getString(KEY_GRAMMAR_ABNF_ID, null);
+            if (TextUtils.isEmpty(grammarId)) {
+                ret = false;
+            } else {
+                mRecognizer.setParameter(SpeechConstant.CLOUD_GRAMMAR, grammarId);
+                ret = true;
+            }
+        }
+
+        final String audio_path = "/msc/asr.wav";
+        mRecognizer.setParameter(SpeechConstant.AUDIO_FORMAT, "wav");
+        mRecognizer.setParameter(SpeechConstant.ASR_AUDIO_PATH, Environment.getExternalStorageState() + audio_path);
+        return ret;
+    }
+
+    public int startRecognize() {
+        int ret;
+        ret = mRecognizer.startListening(mRecognizerListener);
+        String info;
+        if (ret != ErrorCode.SUCCESS) {
+            info = "recognize interface fail, error code: " + ret;
+        } else {
+            info = "recognize interface success";
+        }
+        Log.d(LOG_TAG, info);
+        return ret;
+    }
+
+    public void stopRecognize() {
+        mRecognizer.stopListening();
+    }
+
+    public void cancelRecognize() {
+        mRecognizer.cancel();
+    }
+
+    public String getAction() {
+        this.stopRecognize();
+        Log.d(LOG_TAG, "action result" + mActionResult);
+        String ret = new String(mActionResult);
+        mActionResult = "";
+        return ret;
+    }
+    //end 语音部分
+
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()){
+            case R.id.isr_grammar:
+
+                break;
+            // 开始识别
+            case R.id.isr_recognize:
+                ((EditText)findViewById(R.id.isr_text)).setText(null);// 清空显示内容
+                // 设置参数
+
+                break;
+            // 停止识别
+            case R.id.isr_stop:
+
+                break;
+            // 取消识别
+            case R.id.isr_cancel:
+
+                break;
+        }
+
+    }
 
     void toggleShowExtraKeys() {
         final ViewPager viewPager = findViewById(R.id.viewpager);

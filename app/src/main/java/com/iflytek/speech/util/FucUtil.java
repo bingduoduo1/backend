@@ -11,6 +11,8 @@ import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechUtility;
 
 import android.content.Context;
+import android.util.Log;
+
 
 /**
  * 功能性函数扩展类
@@ -20,19 +22,22 @@ public class FucUtil {
 	 * 读取asset目录下文件。
 	 * @return content
 	 */
+	private static final String TAG="FucUtil";
 	public static String readFile(Context mContext,String file,String code)
 	{
+
 		int len = 0;
 		byte []buf = null;
 		String result = "";
 		try {
-			InputStream in = mContext.getAssets().open(file);			
+			InputStream in = mContext.getResources().getAssets().open(file);
 			len  = in.available();
 			buf = new byte[len];
 			in.read(buf, 0, len);
 			
 			result = new String(buf,code);
 		} catch (Exception e) {
+            Log.e(TAG, "readFile: find not file");
 			e.printStackTrace();
 		}
 		return result;

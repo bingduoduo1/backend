@@ -2,11 +2,14 @@ package com.iflytek.voicedemo;
 
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
+import android.content.Context;
 
 import com.iflytek.cloud.ErrorCode;
 import com.iflytek.cloud.GrammarListener;
@@ -19,16 +22,18 @@ import com.iflytek.cloud.SpeechError;
 import com.iflytek.cloud.SpeechRecognizer;
 import com.iflytek.speech.util.JsonParser;
 
+import static android.content.ContentValues.TAG;
 import static android.content.Context.MODE_PRIVATE;
 
 
-public class SpeechRecognitionIflytek implements SpeechRecognitionInterface{
+public class SpeechRecognitionIflytek extends Application implements SpeechRecognitionInterface{
     private static final String LOG_TAG = SpeechRecognitionIflytek.class.getSimpleName();
 
     private static final String KEY_GRAMMAR_ABNF_ID = "grammar_abnf_id";
     private static final String GRAMMAR_TYPE_ABNF = "abnf";
     private static final String GRAMMAR_TYPE_BNF = "bnf";
     private static final String mCloud = "cloud";
+    private static Context context;
     private final String mEngineType = SpeechConstant.TYPE_CLOUD;
 
     private SpeechRecognizer mRecognizer;
@@ -39,8 +44,15 @@ public class SpeechRecognitionIflytek implements SpeechRecognitionInterface{
     private String mActionResult;
 
 
-    public SpeechRecognitionIflytek(Activity callerActivity, String grammarPath){
-        mCallerActivity = callerActivity;
+
+    public void onCreate() {
+        super.onCreate();
+        SpeechRecognitionIflytek.context = getApplicationContext();
+    }
+
+
+    public SpeechRecognitionIflytek(String grammarPath){
+        //mCallerActivity = callerActivity;
         mGrammarPath = grammarPath;
         mActionResult = "";
         this.initSpeechRecognizer();
@@ -48,13 +60,20 @@ public class SpeechRecognitionIflytek implements SpeechRecognitionInterface{
     }
 
     private void initSpeechRecognizer() {
-        mRecognizer = SpeechRecognizer.createRecognizer(mCallerActivity, mInitListener);
-        mCLoudGrammar = com.iflytek.speech.util.FucUtil.readFile(mCallerActivity, mGrammarPath,"utf-8");
-
-        mSharedPreferences = mCallerActivity.getSharedPreferences(mCallerActivity.getPackageName(),	MODE_PRIVATE);
+        Log.e(TAG, mCallerActivity + " " + mInitListener );
+        SpeechRecognitionIflytek.context = this.getApplicationContext();
+        mRecognizer = SpeechRecognizer.createRecognizer(context, mInitListener);
+        if(mRecognizer == null){
+            Log.e("mRecognizer","NULL!!");
+        }
+        mCLoudGrammar = com.iflytek.speech.util.FucUtil.readFile(context, mGrammarPath,"utf-8");
+        Log.e(TAG, "initSpeechRecognizer: "+ this.getPackageName());
+        mSharedPreferences = this.getSharedPreferences(this.getPackageName(),	MODE_PRIVATE);
     }
 
+
     private InitListener mInitListener = new InitListener(){
+
         @Override
         public void onInit(int code) {
             String info;
@@ -162,6 +181,7 @@ public class SpeechRecognitionIflytek implements SpeechRecognitionInterface{
 
     private boolean SetParam() {
         boolean ret;
+        //mRecognizer.setParameter("engine_type", "cloud");
         mRecognizer.setParameter(SpeechConstant.ENGINE_TYPE, mEngineType);
         mRecognizer.setParameter(SpeechConstant.RESULT_TYPE, "json");
         mRecognizer.setParameter(SpeechConstant.TEXT_ENCODING, "utf-8");
@@ -207,9 +227,9 @@ public class SpeechRecognitionIflytek implements SpeechRecognitionInterface{
     }
 
     public String getAction() {
+        this.stopRecognize();
         Log.d(LOG_TAG, "action result" + mActionResult);
         String ret = new String(mActionResult);
-        this.stopRecognize();
         mActionResult = "";
         return ret;
     }
