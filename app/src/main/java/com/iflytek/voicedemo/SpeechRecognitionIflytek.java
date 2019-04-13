@@ -50,14 +50,8 @@ public class SpeechRecognitionIflytek extends Application implements SpeechRecog
 
 
 
-    public void onCreate() {
-        super.onCreate();
-        SpeechRecognitionIflytek.context = getApplicationContext();
-    }
-
-
-    public SpeechRecognitionIflytek(String grammarPath){
-        //mCallerActivity = callerActivity;
+    public SpeechRecognitionIflytek(Activity callerActivity,String grammarPath){
+        mCallerActivity = callerActivity;
         mGrammarPath = grammarPath;
         mParserResult = "";
         mLookUpHandle = GlobalDictionary.createDictionary();
@@ -66,15 +60,15 @@ public class SpeechRecognitionIflytek extends Application implements SpeechRecog
     }
 
     private void initSpeechRecognizer() {
-        Log.e(TAG, mCallerActivity + " " + mInitListener );
-        SpeechRecognitionIflytek.context = this.getApplicationContext();
-        mRecognizer = SpeechRecognizer.createRecognizer(context, mInitListener);
+        //Log.e(TAG, mCallerActivity + " " + mInitListener );
+        //SpeechRecognitionIflytek.context = this.getApplicationContext();
+        mRecognizer = SpeechRecognizer.createRecognizer(mCallerActivity, mInitListener);
         if(mRecognizer == null){
             Log.e("mRecognizer","NULL!!");
         }
-        mCLoudGrammar = com.iflytek.speech.util.FucUtil.readFile(context, mGrammarPath,"utf-8");
-        Log.e(TAG, "initSpeechRecognizer: "+ this.getPackageName());
-        mSharedPreferences = this.getSharedPreferences(this.getPackageName(),	MODE_PRIVATE);
+        mCLoudGrammar = com.iflytek.speech.util.FucUtil.readFile(mCallerActivity, mGrammarPath,"utf-8");
+//        Log.e(TAG, "initSpeechRecognizer: "+ this.getPackageName());
+        mSharedPreferences = mCallerActivity.getSharedPreferences(mCallerActivity.getPackageName(),	MODE_PRIVATE);
     }
 
 
