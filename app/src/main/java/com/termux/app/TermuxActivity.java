@@ -229,6 +229,10 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
         mTerminalView.setKeepScreenOn(mSettings.isScreenAlwaysOn());
         mTerminalView.requestFocus();
 
+        //禁用输入法
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM,
+            WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+
         //分页
         final ViewPager viewPager = findViewById(R.id.viewpager);//androidx.viewpager.widget.ViewPager
         if (mSettings.mShowExtraKeys) viewPager.setVisibility(View.VISIBLE);
