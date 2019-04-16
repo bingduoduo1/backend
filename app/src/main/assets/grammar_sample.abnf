@@ -1,8 +1,7 @@
 #ABNF 1.0 UTF-8;
-language zh-CN; 
 mode voice;
 
 root $main;
-$main = $place1 到 $place2;
-$place1 = 北京|武汉|南京|天津|东京;
-$place2 = 上海|合肥;
+$main = $place1
+$place1 = a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z;
+

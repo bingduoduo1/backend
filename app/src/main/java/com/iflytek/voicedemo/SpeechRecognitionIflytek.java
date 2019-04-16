@@ -59,13 +59,15 @@ public class SpeechRecognitionIflytek extends Application implements SpeechRecog
         this.SetParam();
     }
 
+
+
     private void initSpeechRecognizer() {
         //Log.e(TAG, mCallerActivity + " " + mInitListener );
         //SpeechRecognitionIflytek.context = this.getApplicationContext();
         mRecognizer = SpeechRecognizer.createRecognizer(mCallerActivity, mInitListener);
-        if(mRecognizer == null){
-            Log.e("mRecognizer","NULL!!");
-        }
+        //if(mRecognizer == null){
+        //    Log.e("mRecognizer","NULL!!");
+        //}
         mCLoudGrammar = com.iflytek.speech.util.FucUtil.readFile(mCallerActivity, mGrammarPath,"utf-8");
 //        Log.e(TAG, "initSpeechRecognizer: "+ this.getPackageName());
         mSharedPreferences = mCallerActivity.getSharedPreferences(mCallerActivity.getPackageName(),	MODE_PRIVATE);
@@ -196,9 +198,19 @@ public class SpeechRecognitionIflytek extends Application implements SpeechRecog
             }
         }
 
-        final String audio_path = "/msc/asr.wav";
-        mRecognizer.setParameter(SpeechConstant.AUDIO_FORMAT, "wav");
-        mRecognizer.setParameter(SpeechConstant.ASR_AUDIO_PATH, Environment.getExternalStorageState() + audio_path);
+        // 设置音频保存路径，保存音频格式支持pcm、wav，设置路径为sd卡请注意WRITE_EXTERNAL_STORAGE权限
+        mRecognizer.setParameter(SpeechConstant.AUDIO_FORMAT,"wav");
+        boolean tmp = mRecognizer.setParameter(SpeechConstant.ASR_AUDIO_PATH, Environment.getExternalStorageDirectory()+"/msc/asr.wav");
+
+        //final String audio_path = "/msc/asr.wav";
+        //mRecognizer.setParameter(SpeechConstant.AUDIO_FORMAT, "wav");
+        //boolean tmp  =  mRecognizer.setParameter(SpeechConstant.ASR_AUDIO_PATH, Environment.getExternalStorageState() + audio_path);
+        if(tmp==true){
+            Log.e(TAG, "SetParam: wav true" );
+        }
+        else{
+            Log.e(TAG, "SetParam: wav flase");
+        }
         return ret;
     }
 
@@ -225,13 +237,13 @@ public class SpeechRecognitionIflytek extends Application implements SpeechRecog
 
     public String getAction() {
         this.stopRecognize();
-        if("" == mParserResult){
-            Log.e(TAG, "getAction: \"\" mParseResult" );
-        }
+        //if("" == mParserResult){
+        //    Log.e(TAG, "getAction: \"\" mParseResult" );
+        //}
         //Toast.makeText(this,mParserResult,Toast.LENGTH_LONG);
-        Log.d(LOG_TAG, "total parser result" + mParserResult);
+        //Log.d(LOG_TAG, "total parser result" + mParserResult);
 
-        mParserResult="a";
+        //mParserResult="a";
         StringBuffer ret = new StringBuffer("");
         try {
             mLookUpHandle.exactLookUpWord(mParserResult, ret);
@@ -240,6 +252,9 @@ public class SpeechRecognitionIflytek extends Application implements SpeechRecog
             e.printStackTrace();
         }
         mParserResult = "";
+        if(ret.length()==0){//因为输入零字节的字符到Session.write中会报错,所以改为写入换行符
+            ret.append('\n');
+        }
         Log.d(LOG_TAG, "action result:" + ret+";");
         return ret.toString();
     }

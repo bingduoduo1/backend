@@ -417,10 +417,13 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
                         break;
                     }
                     case MotionEvent.ACTION_UP: {
-                        String ret = mReconition.getAction();
-                        Toast.makeText(TermuxActivity.this,ret,Toast.LENGTH_LONG).show();
-                        //松开事件发生后执行代码的区域
-                        break;
+                            String ret = mReconition.getAction();
+                            Toast.makeText(TermuxActivity.this, ret, Toast.LENGTH_LONG).show();
+                            TerminalSession ts = getCurrentTermSession();
+                            ts.write(ret);
+                            //松开事件发生后执行代码的区域
+                            break;
+
                     }
                     default:
                         break;
@@ -433,7 +436,7 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
     //end onCreate
     private void requestPermissions(){
         try {
-            if (Build.VERSION.SDK_INT >= 23) {
+            if (Build.VERSION.SDK_INT >= 21) {
                 int permission = ActivityCompat.checkSelfPermission(this,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE);
                 if(permission!= PackageManager.PERMISSION_GRANTED) {

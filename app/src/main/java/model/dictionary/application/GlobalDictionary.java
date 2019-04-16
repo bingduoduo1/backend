@@ -33,11 +33,11 @@ public class GlobalDictionary implements LookUpInterface {
 
         Log.e(TAG, "exactLookUpWord:"+word +";");
         actionRef = mTextDict.lookUpAction(word);
-        Log.e(TAG, "exactLookUpWord: "+((InputAction) actionRef).getContent() );
+        //Log.e(TAG, "exactLookUpWord: "+((InputAction) actionRef).getContent() );
         if (actionRef != null) {
             if (actionRef instanceof InputAction) {
                 action.append(((InputAction) actionRef).getContent());
-                Log.e(TAG, "exactLookUpWord: Action:"+action+";");
+                //Log.e(TAG, "exactLookUpWord: Action:"+action+";");
                 return;
             } else {
                 throw new DictionaryException("invalid instance class name: " + actionRef.getClass().getSimpleName());
@@ -55,10 +55,12 @@ public class GlobalDictionary implements LookUpInterface {
         actionRef = mCommandDict.lookUpAction(word);
         if (actionRef != null) {
             if (actionRef instanceof InputAction) {
-                action.append( ((InputAction) actionRef).getContent());
+                action.append(((InputAction) actionRef).getContent());
+            } else {
+                throw new DictionaryException("invalid instance class name: " + actionRef.getClass().getSimpleName());
             }
-        } else {
-            throw new DictionaryException("invalid instance class name: " + actionRef.getClass().getSimpleName());
+        }else{
+            throw new DictionaryException("Action Ref is Null!");
         }
     }
 
