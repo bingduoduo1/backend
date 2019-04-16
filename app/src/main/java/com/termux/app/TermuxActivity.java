@@ -59,7 +59,7 @@ import com.iflytek.cloud.SpeechRecognizer;
 import com.iflytek.cloud.SpeechUtility;
 import com.iflytek.speech.util.FucUtil;
 import com.iflytek.voicedemo.AsrDemo;
-import com.iflytek.voicedemo.SpeechRecognitionIflytek;
+import com.iflytek.voicedemo.SpeechRecognitionIat;
 import com.termux.R;
 import com.termux.terminal.EmulatorDebug;
 import com.termux.terminal.TerminalColors;
@@ -394,7 +394,7 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
 
         //mSharedPreferences = getSharedPreferences(getPackageName(),	MODE_PRIVATE);
 
-        SpeechRecognitionIflytek mReconition = new SpeechRecognitionIflytek( TermuxActivity.this,"grammar_sample.abnf");
+        SpeechRecognitionIat mReconition = new SpeechRecognitionIat( TermuxActivity.this,"userwords");
 
         Button btn_voice = (Button) findViewById(R.id.btn_voice);
 
