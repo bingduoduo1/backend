@@ -379,7 +379,7 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
 
 
         // todo main
-        SpeechUtility.createUtility(this, "appid=5ca3663d");
+        SpeechUtility.createUtility(this, "appid=5c9cc920");
         this.requestPermissions();
         //if(null == mRecognizer){
         //    Log.e("TermuxActivity", "onCreate:  Null!!!");

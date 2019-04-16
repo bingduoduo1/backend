@@ -7,6 +7,8 @@ import android.app.job.JobInfo;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
@@ -56,6 +58,14 @@ public class SpeechRecognitionIat extends Application implements SpeechRecogniti
     private StringBuffer mParserResult;
     private LookUpInterface mLookUpHandle;
     private boolean mEnableTranslate;
+
+    Handler han = new Handler(){
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+        }
+    };
 
 
 
@@ -149,6 +159,12 @@ public class SpeechRecognitionIat extends Application implements SpeechRecogniti
                     parser_result = recognizerResult.getResultString();
                 }
                 Log.d(LOG_TAG, "parser result: "+ parser_result);
+                if (islast) {
+                    // TODO 最后的结果
+                    Message message = Message.obtain();
+                    message.what = 0x001;//useless but just set it 0x001
+                    han.sendMessageDelayed(message,100);
+                }
                 mParserResult.append(parser_result);
             } else {
                 Log.d(LOG_TAG, "recognizer result is null");
@@ -170,7 +186,7 @@ public class SpeechRecognitionIat extends Application implements SpeechRecogniti
     };
 
     private String parseNormalResult(RecognizerResult result) {
-        //String text = JsonParser.parseIatResult(result.getResultString());
+        String text = JsonParser.parseIatResult(result.getResultString());
         String sn_part = null;
         try {
             JSONObject result_json = new JSONObject(result.getResultString());
@@ -178,7 +194,7 @@ public class SpeechRecognitionIat extends Application implements SpeechRecogniti
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return sn_part;
+        return text;
     }
 
     private String parseTranslateResult(RecognizerResult result) {
@@ -251,6 +267,7 @@ public class SpeechRecognitionIat extends Application implements SpeechRecogniti
 
     public String getAction() {
         this.stopRecognize();
+
         //if("" == mParserResult){
         //    Log.e(TAG, "getAction: \"\" mParseResult" );
         //}
@@ -258,7 +275,8 @@ public class SpeechRecognitionIat extends Application implements SpeechRecogniti
         //Log.d(LOG_TAG, "total parser result" + mParserResult);
 
         //mParserResult="a";
-        StringBuffer ret = new StringBuffer("");
+        StringBuffer ret = new StringBuffer();
+        Log.e(TAG, "getAction: String:"+mParserResult.toString() );
         try {
             mLookUpHandle.exactLookUpWord(mParserResult.toString(), ret);
         } catch (DictionaryException e){
