@@ -2,11 +2,15 @@ package model.dictionary.application;
 
 
 
+import android.util.Log;
+
 import model.dictionary.exception.DictionaryException;
 import model.dictionary.exception.NotImplementedError;
 import model.dictionary.helper.GlobalHelper;
 import model.dictionary.model.BaseAction;
 import model.dictionary.model.InputAction;
+
+import static android.content.ContentValues.TAG;
 
 public class GlobalDictionary implements LookUpInterface {
     private PythonDictionary mPythonDict;
@@ -25,10 +29,14 @@ public class GlobalDictionary implements LookUpInterface {
     @Override
     public void exactLookUpWord(String word, String action) throws DictionaryException {
         BaseAction actionRef = null;
+
+        Log.e(TAG, "exactLookUpWord:"+word +";");
         actionRef = mTextDict.lookUpAction(word);
+        Log.e(TAG, "exactLookUpWord: "+((InputAction) actionRef).getContent() );
         if (actionRef != null) {
             if (actionRef instanceof InputAction) {
                 action = ((InputAction) actionRef).getContent();
+                Log.e(TAG, "exactLookUpWord: instanceof InputAction TextDict");
                 return;
             } else {
                 throw new DictionaryException("invalid instance class name: " + actionRef.getClass().getSimpleName());

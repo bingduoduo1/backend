@@ -225,10 +225,17 @@ public class SpeechRecognitionIflytek extends Application implements SpeechRecog
 
     public String getAction() {
         this.stopRecognize();
+        if("" == mParserResult){
+            Log.e(TAG, "getAction: \"\" mParseResult" );
+        }
+        //Toast.makeText(this,mParserResult,Toast.LENGTH_LONG);
         Log.d(LOG_TAG, "total parser result" + mParserResult);
+
+        mParserResult="a";
         String ret = "";
         try {
             mLookUpHandle.exactLookUpWord(mParserResult, ret);
+
         } catch (DictionaryException e){
             e.printStackTrace();
         }

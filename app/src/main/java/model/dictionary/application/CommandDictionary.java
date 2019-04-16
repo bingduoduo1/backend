@@ -31,6 +31,8 @@ public class CommandDictionary implements BaseDictionaryInterface {
                 new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "ls"));
             mDictionary.put(new CustomWord("cd", NatureLanguageType.ENGLISH),
                 new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "cd"));
+            mDictionary.put(new CustomWord(" ", NatureLanguageType.ENGLISH),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, " "));
         } catch (DictionaryException e) {
             e.printStackTrace();
         }

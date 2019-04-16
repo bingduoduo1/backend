@@ -16,4 +16,25 @@ public abstract class BaseWord {
     public NatureLanguageType getNatureType() {
         return mNatureType;
     }
+
+
+    @Override
+    public boolean equals(Object obj){
+        if(null == obj)return false;
+        BaseWord word = (BaseWord)obj;
+        if(this.mRawData == word.getRawData() &&
+            this.mNatureType == word.getNatureType())
+            return true;
+        return false;
+
+    }
+
+    @Override
+    public int hashCode(){
+        int hash = 7;
+        hash = 31 * hash +  mNatureType.hashCode();
+        hash = 31 * hash + (mRawData== null ? 0 : mRawData.hashCode());
+        return hash;
+
+    }
 }

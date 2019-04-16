@@ -1,5 +1,7 @@
 package model.dictionary.application;
 
+import android.util.Log;
+
 import java.util.HashMap;
 
 import model.dictionary.exception.DictionaryException;
@@ -11,6 +13,8 @@ import model.dictionary.model.ExecutePlaceType;
 import model.dictionary.model.InputAction;
 import model.dictionary.model.CustomWord;
 import model.dictionary.model.NatureLanguageType;
+
+import static android.content.ContentValues.TAG;
 
 public class TextDictionary implements BaseDictionaryInterface {
     private HashMap<BaseWord, BaseAction> mDictionary;
@@ -40,7 +44,9 @@ public class TextDictionary implements BaseDictionaryInterface {
     }
 
     public BaseAction lookUpAction(BaseWord key) {
+
         if (mDictionary.containsKey(key)) {
+            //Log.e(TAG, "lookUpAction: search for key: " + key.getRawData() );
             return mDictionary.get(key);
         } else {
             return null;
