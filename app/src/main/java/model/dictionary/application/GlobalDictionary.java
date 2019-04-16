@@ -2,6 +2,7 @@ package model.dictionary.application;
 
 
 
+import android.renderscript.ScriptGroup;
 import android.util.Log;
 
 import model.dictionary.exception.DictionaryException;
@@ -27,7 +28,7 @@ public class GlobalDictionary implements LookUpInterface {
         return mGlobalDict;
     }
     @Override
-    public void exactLookUpWord(String word, String action) throws DictionaryException {
+    public void exactLookUpWord(String word, StringBuffer action) throws DictionaryException {
         BaseAction actionRef = null;
 
         Log.e(TAG, "exactLookUpWord:"+word +";");
@@ -35,8 +36,8 @@ public class GlobalDictionary implements LookUpInterface {
         Log.e(TAG, "exactLookUpWord: "+((InputAction) actionRef).getContent() );
         if (actionRef != null) {
             if (actionRef instanceof InputAction) {
-                action = ((InputAction) actionRef).getContent();
-                Log.e(TAG, "exactLookUpWord: instanceof InputAction TextDict");
+                action.append(((InputAction) actionRef).getContent());
+                Log.e(TAG, "exactLookUpWord: Action:"+action+";");
                 return;
             } else {
                 throw new DictionaryException("invalid instance class name: " + actionRef.getClass().getSimpleName());
@@ -45,7 +46,7 @@ public class GlobalDictionary implements LookUpInterface {
         actionRef = mPythonDict.lookUpAction(word);
         if (actionRef != null) {
             if (actionRef instanceof InputAction) {
-                action = ((InputAction) actionRef).getContent();
+                action.append( ((InputAction) actionRef).getContent());
                 return;
             } else {
                 throw new DictionaryException("invalid instance class name: " + actionRef.getClass().getSimpleName());
@@ -54,7 +55,7 @@ public class GlobalDictionary implements LookUpInterface {
         actionRef = mCommandDict.lookUpAction(word);
         if (actionRef != null) {
             if (actionRef instanceof InputAction) {
-                action = ((InputAction) actionRef).getContent();
+                action.append( ((InputAction) actionRef).getContent());
             }
         } else {
             throw new DictionaryException("invalid instance class name: " + actionRef.getClass().getSimpleName());

@@ -3,6 +3,6 @@ package model.dictionary.application;
 import model.dictionary.exception.DictionaryException;
 
 public interface LookUpInterface {
-    void exactLookUpWord(final String word, String action) throws DictionaryException;
+    void exactLookUpWord(final String word, StringBuffer action) throws DictionaryException;
     void fuzzyLookUpWord(final String word, String action) throws DictionaryException;
 }

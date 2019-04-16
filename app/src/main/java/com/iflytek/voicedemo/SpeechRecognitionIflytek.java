@@ -232,7 +232,7 @@ public class SpeechRecognitionIflytek extends Application implements SpeechRecog
         Log.d(LOG_TAG, "total parser result" + mParserResult);
 
         mParserResult="a";
-        String ret = "";
+        StringBuffer ret = new StringBuffer("");
         try {
             mLookUpHandle.exactLookUpWord(mParserResult, ret);
 
@@ -240,8 +240,8 @@ public class SpeechRecognitionIflytek extends Application implements SpeechRecog
             e.printStackTrace();
         }
         mParserResult = "";
-        Log.d(LOG_TAG, "action result" + ret);
-        return ret;
+        Log.d(LOG_TAG, "action result:" + ret+";");
+        return ret.toString();
     }
 
     public void destroy() {
