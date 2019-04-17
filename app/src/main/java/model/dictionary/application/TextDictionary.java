@@ -39,11 +39,11 @@ public class TextDictionary implements BaseDictionaryInterface {
             mDictionary.put(new CustomWord("bracket", NatureLanguageType.ENGLISH),
                 new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "("));
             mDictionary.put(new CustomWord("b", NatureLanguageType.ENGLISH),
-                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "b\n"));
+                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "b"));
             mDictionary.put(new CustomWord("c", NatureLanguageType.ENGLISH),
-                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "c\n"));
+                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "c"));
             mDictionary.put(new CustomWord("abccc", NatureLanguageType.ENGLISH),
-                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "b\n"));
+                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "b"));
         } catch (DictionaryException e) {
             e.printStackTrace();
         }
