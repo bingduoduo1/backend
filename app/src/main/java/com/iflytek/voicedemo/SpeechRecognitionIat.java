@@ -288,7 +288,7 @@ public class SpeechRecognitionIat extends Activity implements SpeechRecognitionI
         StringBuffer ret = new StringBuffer();
         Log.d(TAG, "getAction: String:"+mParserResult.toString() );
         try {
-            mLookUpHandle.exactLookUpWord(mParserResult.toString(), ret);
+            mLookUpHandle.exactLookUpWord(mParserResult.toString().toLowerCase(), ret);
         } catch (DictionaryException e){
             e.printStackTrace();
         }

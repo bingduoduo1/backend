@@ -29,6 +29,20 @@ public class PythonDictionary implements BaseDictionaryInterface {
                             new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "import"));
             mDictionary.put(new CustomWord("math", NatureLanguageType.ENGLISH),
                 new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "math"));
+            mDictionary.put(new CustomWord("sin", NatureLanguageType.ENGLISH),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "sin"));
+            mDictionary.put(new CustomWord("cos", NatureLanguageType.ENGLISH),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "cos"));
+            mDictionary.put(new CustomWord("exit", NatureLanguageType.ENGLISH),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "exit"));
+
+            /*
+            add("import");
+        add("math");
+        add("sin");
+        add("cos");
+        add("exit");
+             */
         } catch (DictionaryException e) {
             e.printStackTrace();
         }

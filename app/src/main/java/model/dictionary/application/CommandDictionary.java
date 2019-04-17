@@ -33,6 +33,10 @@ public class CommandDictionary implements BaseDictionaryInterface {
                 new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "cd"));
             mDictionary.put(new CustomWord(" ", NatureLanguageType.ENGLISH),
                 new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, " "));
+
+            mDictionary.put(new CustomWord("python", NatureLanguageType.ENGLISH),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "python"));
+
         } catch (DictionaryException e) {
             e.printStackTrace();
         }
