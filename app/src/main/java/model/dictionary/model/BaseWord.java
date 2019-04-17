@@ -1,8 +1,8 @@
 package model.dictionary.model;
 
 public abstract class BaseWord {
-    private final String mRawData;
-    private final NatureLanguageType mNatureType;
+    protected final String mRawData;
+    protected final NatureLanguageType mNatureType;
 
     public BaseWord(String rawData, NatureLanguageType natureType) {
         mRawData = rawData;
@@ -20,12 +20,14 @@ public abstract class BaseWord {
 
     @Override
     public boolean equals(Object obj){
+
         if(null == obj)return false;
         BaseWord word = (BaseWord)obj;
-        if(this.mRawData == word.getRawData() &&
+        if((this.mRawData).equals(word.getRawData())  &&
             this.mNatureType == word.getNatureType())
             return true;
         return false;
+
 
     }
 

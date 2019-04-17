@@ -25,6 +25,8 @@ import com.iflytek.cloud.SpeechError;
 import com.iflytek.cloud.SpeechRecognizer;
 import com.iflytek.speech.util.FucUtil;
 import com.iflytek.speech.util.JsonParser;
+import com.iflytek.sunflower.FlowerCollector;
+import com.termux.terminal.TerminalSession;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,7 +39,7 @@ import model.dictionary.exception.DictionaryException;
 import static android.content.Context.MODE_PRIVATE;
 
 
-public class SpeechRecognitionIat extends Application implements SpeechRecognitionInterface{
+public class SpeechRecognitionIat extends Activity implements SpeechRecognitionInterface{
     private static final String LOG_TAG = SpeechRecognitionIflytek.class.getSimpleName();
 
     private static final String KEY_GRAMMAR_ABNF_ID = "grammar_abnf_id";
@@ -47,7 +49,7 @@ public class SpeechRecognitionIat extends Application implements SpeechRecogniti
     private static final String mResultType = "json";
     private static final String MUTE_BEGIN_TIME = "4000";
     private static final String MUTE_STOP_TIME = "1000";
-    private static final String ENABLE_PUNCTUATE = "1";
+    private static final String ENABLE_PUNCTUATE = "0";
     private final String mEngineType = SpeechConstant.TYPE_CLOUD;
 
     private String mLanguage = "zh_cn";
@@ -58,6 +60,7 @@ public class SpeechRecognitionIat extends Application implements SpeechRecogniti
     private StringBuffer mParserResult;
     private LookUpInterface mLookUpHandle;
     private boolean mEnableTranslate;
+    public boolean mRecognitionDone=false;
 
     Handler han = new Handler(){
 
@@ -135,16 +138,19 @@ public class SpeechRecognitionIat extends Application implements SpeechRecogniti
 
         @Override
         public void onBeginOfSpeech() {
-
+            mRecognitionDone=false;
+            Toast.makeText(mCallerActivity,"Begin of Speech",Toast.LENGTH_SHORT);
         }
 
         @Override
         public void onEndOfSpeech() {
-
+            Toast.makeText(mCallerActivity,"OnEndOfSpeech",Toast.LENGTH_SHORT);
+            Log.d(LOG_TAG, "end of speech : "+System.currentTimeMillis());
         }
 
         @Override
         public void onResult(RecognizerResult recognizerResult, boolean islast) {
+            Log.d(TAG, "OnResult: begin : "+System.currentTimeMillis());
             if (null != recognizerResult) {
                 String origin_result = recognizerResult.getResultString();
                 Log.d(LOG_TAG, "origin recognizer result: " + origin_result);
@@ -159,16 +165,19 @@ public class SpeechRecognitionIat extends Application implements SpeechRecogniti
                     parser_result = recognizerResult.getResultString();
                 }
                 Log.d(LOG_TAG, "parser result: "+ parser_result);
-                if (islast) {
-                    // TODO 最后的结果
-                    Message message = Message.obtain();
-                    message.what = 0x001;//useless but just set it 0x001
-                    han.sendMessageDelayed(message,100);
-                }
                 mParserResult.append(parser_result);
+
+                Log.d(TAG, "Onresult: end : "+System.currentTimeMillis());
+                if (islast) {
+                        Log.d(LOG_TAG, "last result" + mParserResult+"-------------------------");
+                    mRecognitionDone=true;
+                        //Log.d(LOG_TAG, "action"+getAction());
+
+                }
             } else {
                 Log.d(LOG_TAG, "recognizer result is null");
             }
+
         }
 
         @Override
@@ -258,6 +267,7 @@ public class SpeechRecognitionIat extends Application implements SpeechRecogniti
     }
 
     public void stopRecognize() {
+        Log.d(LOG_TAG, "stop time : "+System.currentTimeMillis());
         mRecognizer.stopListening();
     }
 
@@ -266,7 +276,9 @@ public class SpeechRecognitionIat extends Application implements SpeechRecogniti
     }
 
     public String getAction() {
-        this.stopRecognize();
+        Log.d(LOG_TAG, "get action in");
+        //this.stopRecognize();
+        //Log.d(LOG_TAG, "stop ok");
 
         //if("" == mParserResult){
         //    Log.e(TAG, "getAction: \"\" mParseResult" );
@@ -275,8 +287,9 @@ public class SpeechRecognitionIat extends Application implements SpeechRecogniti
         //Log.d(LOG_TAG, "total parser result" + mParserResult);
 
         //mParserResult="a";
+
         StringBuffer ret = new StringBuffer();
-        Log.e(TAG, "getAction: String:"+mParserResult.toString() );
+        Log.d(TAG, "getAction: String:"+mParserResult.toString() );
         try {
             mLookUpHandle.exactLookUpWord(mParserResult.toString(), ret);
         } catch (DictionaryException e){
@@ -287,6 +300,7 @@ public class SpeechRecognitionIat extends Application implements SpeechRecogniti
             ret.append('\n');
         }
         Log.d(LOG_TAG, "action result:" + ret+";");
+        Log.d(TAG, "getAction: end : "+System.currentTimeMillis());
         return ret.toString();
     }
 
@@ -295,5 +309,32 @@ public class SpeechRecognitionIat extends Application implements SpeechRecogniti
             mRecognizer.cancel();
             mRecognizer.destroy();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if( null != mRecognizer ){
+            // 退出时释放连接
+            mRecognizer.cancel();
+            mRecognizer.destroy();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        // 开放统计 移动数据统计分析
+        //FlowerCollector.onResume(IatDemo.this);
+        //FlowerCollector.onPageStart(TAG);
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        // 开放统计 移动数据统计分析
+        //FlowerCollector.onPageEnd(TAG);
+        //FlowerCollector.onPause(IatDemo.this);
+        super.onPause();
     }
 }

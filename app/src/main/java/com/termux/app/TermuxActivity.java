@@ -26,7 +26,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.os.Vibrator;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -142,6 +144,7 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
 
     private static final String RELOAD_STYLE_ACTION = "com.termux.app.reload_style";// reload style action
 
+    private static StringBuffer mret= new StringBuffer();
     /** The main view of the activity showing the terminal. Initialized in onCreate(). */
     @SuppressWarnings("NullableProblems")
     @NonNull
@@ -150,6 +153,7 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
     ExtraKeysView mExtraKeysView;
 
     TermuxPreferences mSettings;
+
 
     /**
      * The connection to the {@link TermuxService}. Requested in {@link #onCreate(Bundle)} with a call to
@@ -175,6 +179,25 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
 
 
 
+    //冰多多
+    SpeechRecognitionIat mReconition;
+    Handler han = new Handler(){
+
+        @Override
+        public void handleMessage(Message msg) {
+            mret.append(mReconition.getAction());
+            Toast.makeText(TermuxActivity.this, mret, Toast.LENGTH_LONG).show();
+            TerminalSession ts = getCurrentTermSession();
+            if(mret.length()==0){
+                mret.append("\n");
+            }
+            ts.write(mret.toString());
+            mret.setLength(0);
+        }
+    };
+
+
+    //冰多多
 
 
 
@@ -394,7 +417,7 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
 
         //mSharedPreferences = getSharedPreferences(getPackageName(),	MODE_PRIVATE);
 
-        SpeechRecognitionIat mReconition = new SpeechRecognitionIat( TermuxActivity.this,"userwords");
+        mReconition = new SpeechRecognitionIat( TermuxActivity.this,"userwords");
 
         Button btn_voice = (Button) findViewById(R.id.btn_voice);
 
@@ -406,8 +429,11 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
 
                     case MotionEvent.ACTION_DOWN: {
                         //mReconition.cancelRecognize();
+                        Log.d(TAG, "upup31312 : "+System.currentTimeMillis());
                         mReconition.startRecognize();
+                        //han.sendEmptyMessageDelayed(0,1000);
                         //按住事件发生后执行代码的区域
+                        //
 
                         break;
                         // 开始识别
@@ -417,10 +443,10 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
                         break;
                     }
                     case MotionEvent.ACTION_UP: {
-                            String ret = mReconition.getAction();
-                            Toast.makeText(TermuxActivity.this, ret, Toast.LENGTH_LONG).show();
-                            TerminalSession ts = getCurrentTermSession();
-                            ts.write(ret);
+                            //String ret = mReconition.getAction();
+                       Message message = new Message();
+                       message.what=0;
+                       han.sendMessageDelayed(message,1000);
                             //松开事件发生后执行代码的区域
                             break;
 
