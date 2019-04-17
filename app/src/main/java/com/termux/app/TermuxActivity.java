@@ -88,21 +88,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import model.config.*;
-import model.dictionary.exception.DictionaryException;
-import model.dictionary.model.*;
+
 import android.view.View.OnClickListener;
 
-import com.iflytek.cloud.ErrorCode;
-import com.iflytek.cloud.GrammarListener;
-import com.iflytek.cloud.InitListener;
-import com.iflytek.cloud.LexiconListener;
-import com.iflytek.cloud.RecognizerListener;
-import com.iflytek.cloud.RecognizerResult;
-import com.iflytek.cloud.SpeechConstant;
-import com.iflytek.cloud.SpeechError;
-import com.iflytek.cloud.SpeechRecognizer;
-import com.iflytek.speech.util.JsonParser;
 
 
 
@@ -185,6 +173,8 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
 
         @Override
         public void handleMessage(Message msg) {
+
+
             mret.append(mReconition.getAction());
             Toast.makeText(TermuxActivity.this, mret, Toast.LENGTH_LONG).show();
             TerminalSession ts = getCurrentTermSession();
@@ -193,6 +183,8 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
             }
             ts.write(mret.toString());
             mret.setLength(0);
+            mReconition.stopRecognize();
+            mTerminalView.onScreenUpdated();
         }
     };
 
@@ -370,7 +362,7 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
                 text -> addNewSession(false, text), R.string.new_session_failsafe, text -> addNewSession(true, text)
                 , -1, null, null);
             return true;
-        }); //failsafe?故障保护?
+        });
 
         //todo 这个IMM 可能需要被替换 或者 关闭
 
@@ -446,7 +438,7 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
                             //String ret = mReconition.getAction();
                        Message message = new Message();
                        message.what=0;
-                       han.sendMessageDelayed(message,1000);
+                       han.sendMessageDelayed(message,100);
                             //松开事件发生后执行代码的区域
                             break;
 

@@ -25,8 +25,6 @@ import com.iflytek.cloud.SpeechError;
 import com.iflytek.cloud.SpeechRecognizer;
 import com.iflytek.speech.util.FucUtil;
 import com.iflytek.speech.util.JsonParser;
-import com.iflytek.sunflower.FlowerCollector;
-import com.termux.terminal.TerminalSession;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -277,7 +275,6 @@ public class SpeechRecognitionIat extends Activity implements SpeechRecognitionI
 
     public String getAction() {
         Log.d(LOG_TAG, "get action in");
-        //this.stopRecognize();
         //Log.d(LOG_TAG, "stop ok");
 
         //if("" == mParserResult){
