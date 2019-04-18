@@ -43,7 +43,7 @@
         <meta-data android:name="android.max_aspect" android:value="10.0" />
 
         <activity
-            android:name="com.termux.app.TermuxActivity"
+            android:name="com.termux.app.TermuxActivity"++
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:launchMode="singleTask"
             android:resizeableActivity="true"
