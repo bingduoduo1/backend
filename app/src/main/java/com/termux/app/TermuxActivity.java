@@ -317,7 +317,7 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
                     mExtraKeysView.reload(mSettings.mExtraKeys, ExtraKeysView.defaultCharDisplay);
                 } else {
                     layout = inflater.inflate(R.layout.extra_keys_right, collection, false);
-                    final EditText editText = layout.findViewById(R.id.text_input);//text_input,输入的缓存
+                    final EditText editText = layout.findViewById(R.id.text_input);//text_input,输入的缓存,这是extra_key右边的那一条缓存用的text
                     editText.setOnEditorActionListener((v, actionId, event) -> {
                         TerminalSession session = getCurrentTermSession();
                         if (session != null) {
@@ -394,7 +394,7 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
 
 
         // todo main
-        SpeechUtility.createUtility(this, "appid=5c9cc920");
+        SpeechUtility.createUtility(this, "appid=5c9cc920");//appid需要和sdk的id相匹配
         this.requestPermissions();
         //if(null == mRecognizer){
         //    Log.e("TermuxActivity", "onCreate:  Null!!!");
@@ -438,7 +438,7 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
                             //String ret = mReconition.getAction();
                        Message message = new Message();
                        message.what=0;
-                       han.sendMessageDelayed(message,100);
+                       han.sendMessageDelayed(message,800);
                             //松开事件发生后执行代码的区域
                             break;
 
@@ -447,6 +447,16 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
                         break;
                 }
                 return true;
+            }
+        });
+
+        Button btn_delete = (Button) findViewById(R.id.btn_delete);
+        btn_delete.setOnClickListener(new View.OnClickListener(){
+
+            public void onClick(View v){
+                TerminalSession ts = getCurrentTermSession();
+                ts.writeCodePoint(false,127);
+
             }
         });
 

@@ -661,6 +661,11 @@ public final class TerminalView extends View {
         return true;
     }
 
+
+    /**
+     * @butub
+     *注意这里定义的输入字符和别的io操作的内部编码
+     */
     void inputCodePoint(int codePoint, boolean controlDownFromEvent, boolean leftAltDownFromEvent) {
         if (LOG_KEY_EVENTS) {
             Log.i(EmulatorDebug.LOG_TAG, "inputCodePoint(codePoint=" + codePoint + ", controlDownFromEvent=" + controlDownFromEvent + ", leftAltDownFromEvent="

@@ -250,6 +250,11 @@ public final class TerminalSession extends TerminalOutput {
     }//end initEmulator
 
     /** Write data to the shell process. */
+    /**
+     *
+     * @butub
+     * 注意, 这里是输入termux的最终操作,往这个buff中写入字节,就可以显示需要的字符,或者删除,或者别的功能
+     */
     @Override
     public void write(byte[] data, int offset, int count) {
         if (mShellPid > 0) mTerminalToProcessIOQueue.write(data, offset, count);
