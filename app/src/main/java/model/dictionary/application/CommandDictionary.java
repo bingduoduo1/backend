@@ -44,11 +44,26 @@ public class CommandDictionary implements BaseDictionaryInterface {
 
             // 中文指令字
             mDictionary.put(new CustomWord("回车", NatureLanguageType.CHINESE),
-                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "\r"));
+                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "\r\n"));
             mDictionary.put(new CustomWord("换行", NatureLanguageType.CHINESE),
                 new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "\n"));
             mDictionary.put(new CustomWord("空格", NatureLanguageType.CHINESE),
                 new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, " "));
+            mDictionary.put(new CustomWord("删除", NatureLanguageType.CHINESE),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "DEL"));
+            //python
+            mDictionary.put(new CustomWord("派送", NatureLanguageType.CHINESE),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "python"));
+            mDictionary.put(new CustomWord("拍手", NatureLanguageType.CHINESE),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "python"));
+            mDictionary.put(new CustomWord("胎生", NatureLanguageType.CHINESE),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "python"));
+            mDictionary.put(new CustomWord("pass on", NatureLanguageType.ENGLISH),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "python"));
+            mDictionary.put(new CustomWord("拍摄", NatureLanguageType.CHINESE),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "python"));
+            mDictionary.put(new CustomWord("潘松", NatureLanguageType.CHINESE),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "python"));
 
         } catch (DictionaryException e) {
             e.printStackTrace();

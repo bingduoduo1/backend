@@ -169,24 +169,39 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
 
     //冰多多
     SpeechRecognitionIat mRecognition;
-    Handler han = new Handler(){
+    Handler han = new Handler() {
 
         @Override
         public void handleMessage(Message msg) {
 
             mret.append(mRecognition.getAction());
-            //Toast.makeText(TermuxActivity.this, (mret.append(mret.length())), Toast.LENGTH_LONG).show();
+            doAction();
+            mRecognition.stopRecognize();
+
+        }
+
+
+
+        private void doAction() {
             TerminalSession ts = getCurrentTermSession();
             if(mret.length()==0){
-                //Toast.makeText(TermuxActivity.this, "What?", Toast.LENGTH_SHORT).show();
-                //mret.append("\n");
+                //pass 无Action
+                // or \n?
+                ts.write("\n");
             }else{
-                ts.write(mret.toString());
+
+                switch(mret.toString()){
+                    case "DEL":// 参考 TermuxView:row:682
+                        ts.writeCodePoint(false,127);
+                        break;
+                    default:
+                        ts.write(mret.toString());
+
+                }
                 mret.setLength(0);
                 mRecognition.stopRecognize();
                 mTerminalView.onScreenUpdated();
             }
-            mRecognition.stopRecognize();
         }
     };
 
@@ -451,16 +466,7 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
                 return true;
             }
         });
-
-        Button btn_delete = (Button) findViewById(R.id.btn_delete);
-        btn_delete.setOnClickListener(new View.OnClickListener(){
-
-            public void onClick(View v){
-                TerminalSession ts = getCurrentTermSession();
-                ts.writeCodePoint(false,127);
-
-            }
-        });
+        
 
     }
     //end onCreate

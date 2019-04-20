@@ -6,16 +6,6 @@
     android:fitsSystemWindows="true">
 
     <Button
-        android:id="@+id/btn_delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="261dp"
-        android:layout_marginBottom="473dp"
-        android:text="delete" />
-
-    <Button
         android:id="@+id/btn_voice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -26,7 +16,7 @@
         android:layout_marginEnd="42dp"
         android:layout_marginBottom="472dp"
         android:radius="100dp"
-        android:text="voice" />
+        android:text="@string/btn_voice" />
 
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawer_layout"

@@ -40,7 +40,8 @@ public abstract class InputActionHelper extends GlobalHelper{
         add("python");
         add(" ");
         add("\n");
-        add("\r");
+        add("\r\n");
+        add("DEL");
     }};
     private static ArrayList<String> mPythonKeyWordList = new ArrayList<String>() {{
         add("import");
