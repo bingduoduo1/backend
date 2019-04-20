@@ -23,7 +23,7 @@ build/
 # Built application files
 build/
 *.apk
-*.so
+#*.so
 .externalNativeBuild
 
 # Crashlytics configuations
