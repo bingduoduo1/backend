@@ -13,8 +13,22 @@ interface BaseDictionaryInterface {
     void initDictionary(final String config_path) throws DictionaryException;
     BaseAction lookUpAction(BaseWord key);
     default BaseAction lookUpAction(String word) {
-        NatureLanguageType languageType = NatureLanguageType.ENGLISH;
-        BaseWord key = new CustomWord(word, languageType);
+        NatureLanguageType languageType;
+        BaseWord key;
+        if(word.length() > 0) {
+            char c = word.charAt(0);
+            if ('a' <= c && c <= 'z' || 'A' <= c && c <='Z' ) {
+                languageType = NatureLanguageType.ENGLISH;
+            } else {
+                languageType = NatureLanguageType.CHINESE;
+            }
+            key = new CustomWord(word, languageType);
+        }
+        else{
+            languageType=NatureLanguageType.ENGLISH;
+            key  = new CustomWord(word, NatureLanguageType.ENGLISH);
+        }
+
         return lookUpAction(key);
     }
 }

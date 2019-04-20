@@ -168,23 +168,25 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
 
 
     //冰多多
-    SpeechRecognitionIat mReconition;
+    SpeechRecognitionIat mRecognition;
     Handler han = new Handler(){
 
         @Override
         public void handleMessage(Message msg) {
 
-
-            mret.append(mReconition.getAction());
-            Toast.makeText(TermuxActivity.this, mret, Toast.LENGTH_LONG).show();
+            mret.append(mRecognition.getAction());
+            //Toast.makeText(TermuxActivity.this, (mret.append(mret.length())), Toast.LENGTH_LONG).show();
             TerminalSession ts = getCurrentTermSession();
             if(mret.length()==0){
-                mret.append("\n");
+                //Toast.makeText(TermuxActivity.this, "What?", Toast.LENGTH_SHORT).show();
+                //mret.append("\n");
+            }else{
+                ts.write(mret.toString());
+                mret.setLength(0);
+                mRecognition.stopRecognize();
+                mTerminalView.onScreenUpdated();
             }
-            ts.write(mret.toString());
-            mret.setLength(0);
-            mReconition.stopRecognize();
-            mTerminalView.onScreenUpdated();
+            mRecognition.stopRecognize();
         }
     };
 
@@ -409,7 +411,7 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
 
         //mSharedPreferences = getSharedPreferences(getPackageName(),	MODE_PRIVATE);
 
-        mReconition = new SpeechRecognitionIat( TermuxActivity.this,"userwords");
+        mRecognition = new SpeechRecognitionIat( TermuxActivity.this,"userwords");
 
         Button btn_voice = (Button) findViewById(R.id.btn_voice);
 
@@ -422,7 +424,7 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
                     case MotionEvent.ACTION_DOWN: {
                         //mReconition.cancelRecognize();
                         Log.d(TAG, "upup31312 : "+System.currentTimeMillis());
-                        mReconition.startRecognize();
+                        mRecognition.startRecognize();
                         //han.sendEmptyMessageDelayed(0,1000);
                         //按住事件发生后执行代码的区域
                         //

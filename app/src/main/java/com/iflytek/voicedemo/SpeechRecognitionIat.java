@@ -275,27 +275,20 @@ public class SpeechRecognitionIat extends Activity implements SpeechRecognitionI
 
     public String getAction() {
         Log.d(LOG_TAG, "get action in");
-        //Log.d(LOG_TAG, "stop ok");
 
-        //if("" == mParserResult){
-        //    Log.e(TAG, "getAction: \"\" mParseResult" );
-        //}
-        //Toast.makeText(this,mParserResult,Toast.LENGTH_LONG);
-        //Log.d(LOG_TAG, "total parser result" + mParserResult);
-
-        //mParserResult="a";
-
+        if(mParserResult.length() == 0){//因为输入零字节的字符到Session.write中会报错,所以改为写入换行符
+            Toast.makeText(mCallerActivity,"what?",Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(mCallerActivity,"[" + mParserResult.toString()+"]",Toast.LENGTH_SHORT).show();
+        }
         StringBuffer ret = new StringBuffer();
-        Log.d(TAG, "getAction: String:"+mParserResult.toString() );
         try {
             mLookUpHandle.exactLookUpWord(mParserResult.toString().toLowerCase(), ret);
         } catch (DictionaryException e){
             e.printStackTrace();
         }
         mParserResult.setLength(0);
-        if(ret.length() == 0){//因为输入零字节的字符到Session.write中会报错,所以改为写入换行符
-            ret.append('\n');
-        }
+
         Log.d(LOG_TAG, "action result:" + ret+";");
         Log.d(TAG, "getAction: end : "+System.currentTimeMillis());
         return ret.toString();
