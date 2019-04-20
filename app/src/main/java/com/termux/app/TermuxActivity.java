@@ -59,8 +59,6 @@ import com.iflytek.cloud.InitListener;
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechRecognizer;
 import com.iflytek.cloud.SpeechUtility;
-import com.iflytek.speech.util.FucUtil;
-import com.iflytek.voicedemo.AsrDemo;
 import com.iflytek.voicedemo.SpeechRecognitionIat;
 import com.termux.R;
 import com.termux.terminal.EmulatorDebug;
@@ -466,7 +464,7 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
                 return true;
             }
         });
-        
+
 
     }
     //end onCreate
