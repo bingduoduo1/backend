@@ -111,7 +111,7 @@ import static android.content.ContentValues.TAG;
  * important!
  * 这个活动控制terminal 模拟器
  */
-public final class TermuxActivity extends Activity implements ServiceConnection , OnClickListener {
+public final class TermuxActivity extends Activity implements ServiceConnection  {
 
 
     //长按视图弹出上下文菜单
@@ -496,29 +496,6 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
 
 
 
-    @Override
-    public void onClick(View v) {
-        switch(v.getId()){
-            case R.id.isr_grammar:
-
-                break;
-            // 开始识别
-            case R.id.isr_recognize:
-                ((EditText)findViewById(R.id.isr_text)).setText(null);// 清空显示内容
-                // 设置参数
-
-                break;
-            // 停止识别
-            case R.id.isr_stop:
-
-                break;
-            // 取消识别
-            case R.id.isr_cancel:
-
-                break;
-        }
-
-    }
 
     void toggleShowExtraKeys() {
         final ViewPager viewPager = findViewById(R.id.viewpager);
