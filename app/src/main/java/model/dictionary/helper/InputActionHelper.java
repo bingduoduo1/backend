@@ -7,48 +7,49 @@ public abstract class InputActionHelper extends GlobalHelper{
     private static ArrayList<String> mTokenList = new ArrayList<String>() {{
         add("(");
         add(")");
-        add("a");
-        add("b");
-        add("c");
-        add("d");
-        add("e");
-        add("f");
-        add("g");
-        add("h");
-        add("i");
-        add("j");
-        add("l");
-        add("m");
-        add("n");
-        add("o");
-        add("p");
-        add("q");
-        add("r");
-        add("s");
-        add("t");
-        add("u");
-        add("v");
-        add("w");
-        add("x");
-        add("y");
-        add("z");
+        add(":");
+        add(".");
+        add("-");
+        add("_");
+        add(" ");
+        add("\n");
+        add("\r\n");
     }};
 
     private static ArrayList<String> mShellKeyWordList = new ArrayList<String>() {{
         add("ls");
         add("cd");
         add("python");
-        add(" ");
-        add("\n");
-        add("\r\n");
-        add("DEL");
+        add("pwd");
+        add("cp");
+        add("rm");
+        add("chmod");
+        add("bash");
     }};
+
     private static ArrayList<String> mPythonKeyWordList = new ArrayList<String>() {{
         add("import");
+        add("from");
+        add("def");
+        add("with");
+        add("as");
+        add("if");
+        add("elif");
+        add("while");
+        add("and");
+        add("not");
+        add("for");
+        add("in");
+        add("is");
         add("math");
         add("sin");
         add("cos");
         add("exit");
+        add("numpy");
+    }};
+
+    private static ArrayList<String> mCombinedActionList = new ArrayList<String>() {{
+        add("welcome to use BDD!!!");
     }};
 
 
@@ -57,6 +58,7 @@ public abstract class InputActionHelper extends GlobalHelper{
                 isInteger(content) ||
                 mTokenList.contains(content) ||
                 mShellKeyWordList.contains(content) ||
-                mPythonKeyWordList.contains(content));
+                mPythonKeyWordList.contains(content) ||
+                mCombinedActionList.contains(content));
     }
 }
