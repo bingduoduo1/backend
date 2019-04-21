@@ -9,11 +9,12 @@ public abstract class InputActionHelper extends GlobalHelper{
         add(")");
         add(":");
         add(".");
+        add(",");
         add("-");
         add("_");
         add(" ");
         add("\n");
-        add("\r\n");
+        add("    ");
     }};
 
     private static ArrayList<String> mShellKeyWordList = new ArrayList<String>() {{
@@ -22,6 +23,7 @@ public abstract class InputActionHelper extends GlobalHelper{
         add("python");
         add("pwd");
         add("cp");
+        add("mv");
         add("rm");
         add("chmod");
         add("bash");

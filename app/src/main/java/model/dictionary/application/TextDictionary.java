@@ -34,14 +34,46 @@ public class TextDictionary implements BaseDictionaryInterface {
     @Override
     public void initDictionary() {
         try {
-            mDictionary.put(new CustomWord("a", NatureLanguageType.ENGLISH),
-                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "a"));
-            mDictionary.put(new CustomWord("bracket", NatureLanguageType.ENGLISH),
-                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "("));
-            mDictionary.put(new CustomWord("b", NatureLanguageType.ENGLISH),
-                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "b"));
-            mDictionary.put(new CustomWord("c", NatureLanguageType.ENGLISH),
-                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "c"));
+            for (char item='a'; item<='z'; ++item) {
+                String str = String.valueOf(item);
+                mDictionary.put(new CustomWord(str, NatureLanguageType.ENGLISH),
+                    new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, str));
+            }
+            mDictionary.put(new CustomWord("left bracket", NatureLanguageType.ENGLISH),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, "("));
+            mDictionary.put(new CustomWord("right bracket", NatureLanguageType.ENGLISH),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, ")"));
+            mDictionary.put(new CustomWord("左圆括号", NatureLanguageType.CHINESE),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, "("));
+            mDictionary.put(new CustomWord("右圆括号", NatureLanguageType.CHINESE),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, ")"));
+            mDictionary.put(new CustomWord("colon", NatureLanguageType.ENGLISH),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, ":"));
+            mDictionary.put(new CustomWord("冒号", NatureLanguageType.CHINESE),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, ":"));
+            mDictionary.put(new CustomWord("dot", NatureLanguageType.ENGLISH),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, "."));
+            mDictionary.put(new CustomWord("点", NatureLanguageType.CHINESE),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, "."));
+            mDictionary.put(new CustomWord("comma", NatureLanguageType.ENGLISH),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, ","));
+            mDictionary.put(new CustomWord("逗号", NatureLanguageType.CHINESE),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, ","));
+            mDictionary.put(new CustomWord("杠", NatureLanguageType.CHINESE),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, "-"));
+            mDictionary.put(new CustomWord("下划线", NatureLanguageType.CHINESE),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, "_"));
+            mDictionary.put(new CustomWord("space", NatureLanguageType.ENGLISH),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, " "));
+            mDictionary.put(new CustomWord("空格", NatureLanguageType.CHINESE),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, " "));
+            mDictionary.put(new CustomWord("tab", NatureLanguageType.ENGLISH),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, "    "));  // 默认用4个空格代替
+            mDictionary.put(new CustomWord("换行", NatureLanguageType.CHINESE),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, "\n"));
+            mDictionary.put(new CustomWord("回车", NatureLanguageType.CHINESE),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, "\n"));  // 不区分
+
         } catch (DictionaryException e) {
             e.printStackTrace();
         }

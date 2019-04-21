@@ -189,7 +189,7 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
             }else{
 
                 switch(mret.toString()){
-                    case "DEL":// 参考 TermuxView:row:682
+                    case "backspace":// 参考 TermuxView:row:682
                         ts.writeCodePoint(false,127);
                         break;
                     default:
