@@ -1,6 +1,9 @@
 package model.dictionary.application;
 
+import android.app.Activity;
 import android.util.Log;
+
+import com.iflytek.cloud.ErrorCode;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -10,6 +13,7 @@ import javax.security.auth.login.LoginException;
 
 import model.dictionary.exception.DictionaryException;
 import model.dictionary.exception.NotImplementedError;
+import model.dictionary.helper.GlobalHelper;
 import model.dictionary.model.ActionType;
 import model.dictionary.model.BaseAction;
 import model.dictionary.model.BaseWord;
@@ -101,6 +105,13 @@ public class TextDictionary implements BaseDictionaryInterface {
         if (mDictionary.containsKey((CustomWord)key)) {
             Log.e(TAG, "text lookUpAction: search for key: " + key.getRawData() );
             return mDictionary.get(key);
+        } else if (GlobalHelper.isInteger(key.getRawData())){
+            try {
+                return new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, key.getRawData());
+            } catch (DictionaryException e) {
+                e.printStackTrace();
+                return null;
+            }
         } else {
             return null;
         }
