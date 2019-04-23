@@ -11,6 +11,7 @@ import model.dictionary.exception.NotImplementedError;
 import model.dictionary.model.ActionType;
 import model.dictionary.model.BaseAction;
 import model.dictionary.model.BaseWord;
+import model.dictionary.model.CommandAction;
 import model.dictionary.model.ExecutePlaceType;
 import model.dictionary.model.InputAction;
 import model.dictionary.model.CustomWord;
@@ -36,21 +37,33 @@ public class CommandDictionary implements BaseDictionaryInterface {
                 new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "ls"));
             mDictionary.put(new CustomWord("cd", NatureLanguageType.ENGLISH),
                 new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "cd"));
-            mDictionary.put(new CustomWord(" ", NatureLanguageType.ENGLISH),
-                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, " "));
+            mDictionary.put(new CustomWord("pwd", NatureLanguageType.ENGLISH),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "pwd"));
+            mDictionary.put(new CustomWord("cp", NatureLanguageType.ENGLISH),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "cp"));
+            mDictionary.put(new CustomWord("copy", NatureLanguageType.ENGLISH),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "copy"));
+            mDictionary.put(new CustomWord("mv", NatureLanguageType.ENGLISH),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "mv"));
+            mDictionary.put(new CustomWord("move", NatureLanguageType.ENGLISH),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "mv"));
+            mDictionary.put(new CustomWord("rm", NatureLanguageType.ENGLISH),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "rm"));
+            mDictionary.put(new CustomWord("remove", NatureLanguageType.ENGLISH),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "rm"));
+            mDictionary.put(new CustomWord("chmod", NatureLanguageType.ENGLISH),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "chmod"));
+            mDictionary.put(new CustomWord("change mode", NatureLanguageType.ENGLISH),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "chmod"));
+            mDictionary.put(new CustomWord("bash", NatureLanguageType.ENGLISH),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "bash"));
 
             mDictionary.put(new CustomWord("python", NatureLanguageType.ENGLISH),
                 new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "python"));
 
             // 中文指令字
-            mDictionary.put(new CustomWord("回车", NatureLanguageType.CHINESE),
-                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "\r\n"));
-            mDictionary.put(new CustomWord("换行", NatureLanguageType.CHINESE),
-                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "\n"));
-            mDictionary.put(new CustomWord("空格", NatureLanguageType.CHINESE),
-                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, " "));
-            mDictionary.put(new CustomWord("删除", NatureLanguageType.CHINESE),
-                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "DEL"));
+            mDictionary.put(new CustomWord("退格", NatureLanguageType.CHINESE),
+                new CommandAction(ActionType.COMMAND, ExecutePlaceType.GENERAL, "backspace"));
             //python
             mDictionary.put(new CustomWord("派送", NatureLanguageType.CHINESE),
                 new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "python"));
@@ -64,6 +77,12 @@ public class CommandDictionary implements BaseDictionaryInterface {
                 new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "python"));
             mDictionary.put(new CustomWord("潘松", NatureLanguageType.CHINESE),
                 new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "python"));
+
+            // 组合动作(combined action)
+            mDictionary.put(new CustomWord("BDD", NatureLanguageType.ENGLISH),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, "welcome to use BDD!!!"));
+            mDictionary.put(new CustomWord("冰多多", NatureLanguageType.CHINESE),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, "welcome to use BDD!!!"));
 
         } catch (DictionaryException e) {
             e.printStackTrace();

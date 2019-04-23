@@ -1,7 +1,7 @@
 package model.dictionary.helper;
 
 public abstract class GlobalHelper {
-    protected static boolean isAlpha(String content) {
+    public static boolean isAlpha(String content) {
         if (content.length() != 1) {
             return false;
         }
@@ -9,7 +9,7 @@ public abstract class GlobalHelper {
         return (value >= 'a' && value <= 'z') || (value >= 'A' && value <= 'Z');
     }
 
-    protected static boolean isInteger(String content) {
+    public static boolean isInteger(String content) {
         try {
             Integer.parseInt(content);
         } catch (NumberFormatException e) {
