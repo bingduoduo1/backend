@@ -110,9 +110,10 @@
             </intent-filter>
         </activity-alias>
 
+        <!--defalut is android:authorithies="com.termux.documents"-->
         <provider
             android:name=".filepicker.TermuxDocumentsProvider"
-            android:authorities="com.termux.documents"
+            android:authorities="com.bingduoduo.documents"
             android:grantUriPermissions="true"
             android:exported="true"
             android:permission="android.permission.MANAGE_DOCUMENTS">
@@ -127,7 +128,8 @@
 
         <receiver android:name=".app.TermuxOpenReceiver" />
 
-        <provider android:authorities="com.termux.files"
+        <!--default is com.termux.files-->
+        <provider android:authorities="com.bingduoduo.files"
                   android:readPermission="android.permission.permRead"
                   android:exported="true"
                   android:grantUriPermissions="true"

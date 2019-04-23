@@ -235,8 +235,8 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
 
     void checkForFontAndColors() {
         try {
-            @SuppressLint("SdCardPath") File fontFile = new File("/data/data/com.termux/files/home/.termux/font.ttf");
-            @SuppressLint("SdCardPath") File colorsFile = new File("/data/data/com.termux/files/home/.termux/colors.properties");
+            @SuppressLint("SdCardPath") File fontFile = new File("/data/data/com.bingduoduo/files/home/.termux/font.ttf");//defalut is "/data/data/com.termux/files/home/.termux/font.ttf");
+            @SuppressLint("SdCardPath") File colorsFile = new File("/data/data/com.bingduoduo/files/home/.termux/colors.properties");//default is /data/data/com.termux/files/home/.termux/colors.properties");
 
             final Properties props = new Properties();
             if (colorsFile.isFile()) {
@@ -465,9 +465,12 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
             }
         });
 
+        Log.d(TAG, "onCreate: " + getFilesDir()+"---------------------------");
+
 
     }
     //end onCreate
+
     private void requestPermissions(){
         try {
             if (Build.VERSION.SDK_INT >= 21) {
@@ -654,7 +657,7 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
                 TermuxInstaller.setupIfNeeded(TermuxActivity.this, () -> {
                     if (mTermService == null) return; // Activity might have been destroyed.
                     try {
-                        clearTemporaryDirectory();
+                        clearTemporaryDirectory();// todo-debug
                         addNewSession(false, null);
                     } catch (WindowManager.BadTokenException e) {
                         // Activity finished - ignore.
@@ -769,8 +772,10 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
                 .setPositiveButton(android.R.string.ok, null).show();
         } else {
             String executablePath = (failSafe ? "/system/bin/sh" : null);
+            Log.d(TAG, "addNewSession: " + (executablePath==null?"null":executablePath) + "*********************************");
             TerminalSession newSession = mTermService.createTermSession(executablePath, null, null, failSafe);
             if (sessionName != null) {
+                Log.d(TAG, "addNewSession: name:"+sessionName+"*****************************");
                 newSession.mSessionName = sessionName;
             }
             switchToSession(newSession);

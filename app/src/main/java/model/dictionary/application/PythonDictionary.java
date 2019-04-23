@@ -36,6 +36,10 @@ public class PythonDictionary implements BaseDictionaryInterface {
             mDictionary.put(new CustomWord("exit", NatureLanguageType.ENGLISH),
                 new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "exit"));
 
+            //中文
+            mDictionary.put(new CustomWord("男排", NatureLanguageType.CHINESE),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "numpy"));
+
             /*
             add("import");
         add("math");

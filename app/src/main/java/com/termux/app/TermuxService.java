@@ -28,6 +28,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.ContentValues.TAG;
+
 /**
  * A service holding a list of terminal sessions, {@link #mTerminalSessions}, showing a foreground notification while
  * running so that it is not terminated. The user interacts with the session through {@link TermuxActivity}, but this
@@ -56,8 +58,8 @@ public final class TermuxService extends Service implements SessionChangedCallba
 
     /** Note that this is a symlink on the Android M preview. */
     @SuppressLint("SdCardPath")
-    public static final String FILES_PATH = "/data/data/com.termux/files";
-    public static final String PREFIX_PATH = FILES_PATH + "/usr";
+    public static final String FILES_PATH = "/data/data/com.bingduoduo/files";//default is /data/data/com.termux/files
+    public static final String PREFIX_PATH = FILES_PATH + "/usr";//default is FILES_PATH + "usr";
     public static final String HOME_PATH = FILES_PATH + "/home";
 
     private static final int NOTIFICATION_ID = 1337;
@@ -274,7 +276,7 @@ public final class TermuxService extends Service implements SessionChangedCallba
     TerminalSession createTermSession(String executablePath, String[] arguments, String cwd, boolean failSafe) {
         new File(HOME_PATH).mkdirs();
 
-        if (cwd == null) cwd = HOME_PATH;
+        if (cwd == null) cwd = HOME_PATH;//第一次是null
 
         String[] env = BackgroundJob.buildEnvironment(failSafe, cwd);//类方法,返回环境变量们
         boolean isLoginShell = false;
@@ -282,7 +284,11 @@ public final class TermuxService extends Service implements SessionChangedCallba
         if (executablePath == null) {
             for (String shellBinary : new String[]{"login", "bash", "zsh"}) {//在Prefix_path中寻找可以用的shell
                 File shellFile = new File(PREFIX_PATH + "/bin/" + shellBinary);
+                if(shellFile.exists()){
+                    Log.d(TAG, "createTermSession: exits");
+                }
                 if (shellFile.canExecute()) {
+                    Log.d(TAG, "createTermSession: "+shellFile+"==================================");
                     executablePath = shellFile.getAbsolutePath();
                     break;
                 }
@@ -295,6 +301,7 @@ public final class TermuxService extends Service implements SessionChangedCallba
             isLoginShell = true;
         }
 
+        Log.d(TAG, "createTermSession: "+executablePath + "================================");
         String[] processArgs = BackgroundJob.setupProcessArgs(executablePath, arguments);
         executablePath = processArgs[0];
         int lastSlashIndex = executablePath.lastIndexOf('/');
@@ -302,13 +309,17 @@ public final class TermuxService extends Service implements SessionChangedCallba
         String processName = (isLoginShell ? "-" : "") +
             (lastSlashIndex == -1 ? executablePath : executablePath.substring(lastSlashIndex + 1));
 
+        Log.d(TAG, "createTermSession: processname:" + processName+"=========================");
+        Log.d(TAG, "createTermSession: executablePath:" + executablePath+"=========================");
         String[] args = new String[processArgs.length];
         args[0] = processName;
         if (processArgs.length > 1) System.arraycopy(processArgs, 1, args, 1, processArgs.length - 1);
 
         TerminalSession session = new TerminalSession(executablePath, cwd, args, env, this);
+        Log.d(TAG, "createTermSession: Sessionname:"+session.mSessionName + "=======================");
         mTerminalSessions.add(session);//添加新的Session
-        updateNotification();//更新SerivceNotification?
+        updateNotification();//更新SerivceNotification
+        Log.d(TAG, "createTermSession: END ======================================================");
         return session;
     }
 

@@ -49,6 +49,7 @@ public abstract class InputActionHelper extends GlobalHelper{
         add("sin");
         add("cos");
         add("exit");
+        add("numpy");
     }};
 
 

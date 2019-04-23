@@ -15,6 +15,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static android.content.ContentValues.TAG;
+
 /**
  * A background job launched by Termux.
  */
@@ -147,6 +149,7 @@ public final class BackgroundJob {
         // - A script file without shebang, which we execute with our standard shell $PREFIX/bin/sh instead of the
         //   system /system/bin/sh. The system shell may vary and may not work at all due to LD_LIBRARY_PATH.
         // - A file with shebang, which we try to handle with e.g. /bin/foo -> $PREFIX/bin/foo.
+        Log.d(TAG, "setupProcessArgs: " + fileToExecute +" ````````````````````````````````````");
         String interpreter = null;
         try {
             File file = new File(fileToExecute);

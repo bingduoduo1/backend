@@ -2,22 +2,19 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 28
-
     dependencies {
         implementation "androidx.annotation:annotation:1.0.1"
         implementation "androidx.viewpager:viewpager:1.0.0"
         implementation "androidx.drawerlayout:drawerlayout:1.0.0"
         implementation project(":terminal-view")
     }
-
     defaultConfig {
-        applicationId "com.termux"
+        applicationId 'com.bingduoduo'
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 66
-        versionName "0.66"
+        versionCode 1
+        versionName "0.1"
     }
-
     buildTypes {
         release {
             minifyEnabled true
@@ -25,7 +22,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -34,6 +30,8 @@ android {
         main {
             jniLibs.srcDirs = ['libs']
         }
+    }
+    productFlavors {
     }
 }
 

@@ -28,6 +28,8 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import static android.content.ContentValues.TAG;
+
 /**
  * Install the Termux bootstrap packages if necessary by following the below steps:
  * <p/>
@@ -70,6 +72,7 @@ final class TermuxInstaller {
         UserManager um = (UserManager) activity.getSystemService(Context.USER_SERVICE);
         boolean isPrimaryUser = um.getSerialNumberForUser(android.os.Process.myUserHandle()) == 0;
         if (!isPrimaryUser) {
+            Log.d(TAG, "setupIfNeeded: is not PrimaryUser");
             new AlertDialog.Builder(activity).setTitle(R.string.bootstrap_error_title).setMessage(R.string.bootstrap_error_not_primary_user_message)
                 .setOnDismissListener(dialog -> System.exit(0)).setPositiveButton(android.R.string.ok, null).show();
             return;
@@ -89,7 +92,12 @@ final class TermuxInstaller {
                     final String STAGING_PREFIX_PATH = TermuxService.FILES_PATH + "/usr-staging";
                     final File STAGING_PREFIX_FILE = new File(STAGING_PREFIX_PATH);
 
+                    Log.d(TAG, "run: new File Staging_prefix_path:"+STAGING_PREFIX_PATH);
+                    Log.d(TAG, "run: "+ getContextClassLoader().getParent());
+
+
                     if (STAGING_PREFIX_FILE.exists()) {
+                        Log.d(TAG, "run: staging prefix file exits:delete---------------------");
                         deleteFolder(STAGING_PREFIX_FILE);
                     }
 
@@ -101,6 +109,7 @@ final class TermuxInstaller {
                         ZipEntry zipEntry;
                         while ((zipEntry = zipInput.getNextEntry()) != null) {
                             if (zipEntry.getName().equals("SYMLINKS.txt")) {
+                                Log.d(TAG, "run: symlink.txt-------------------------------------");
                                 BufferedReader symlinksReader = new BufferedReader(new InputStreamReader(zipInput));
                                 String line;
                                 while ((line = symlinksReader.readLine()) != null) {
@@ -114,10 +123,12 @@ final class TermuxInstaller {
                                     ensureDirectoryExists(new File(newPath).getParentFile());
                                 }
                             } else {
+                                Log.d(TAG, "run: not symlink"+zipEntry.getName()+"--------------------------------------");
                                 String zipEntryName = zipEntry.getName();
                                 File targetFile = new File(STAGING_PREFIX_PATH, zipEntryName);
                                 boolean isDirectory = zipEntry.isDirectory();
 
+                                Log.d(TAG, "run: targetFile:"+targetFile.getAbsolutePath()+"---------");
                                 ensureDirectoryExists(isDirectory ? targetFile : targetFile.getParentFile());
 
                                 if (!isDirectory) {
@@ -127,7 +138,9 @@ final class TermuxInstaller {
                                             outStream.write(buffer, 0, readBytes);
                                     }
                                     if (zipEntryName.startsWith("bin/") || zipEntryName.startsWith("libexec") || zipEntryName.startsWith("lib/apt/methods")) {
+                                    //if (zipEntryName.startsWith("bin/") || zipEntryName.startsWith("libexec") || zipEntryName.startsWith("lib/apt/methods")) {
                                         //noinspection OctalInteger
+                                        Log.d(TAG, "run: 0700 :"+targetFile.getAbsolutePath());
                                         Os.chmod(targetFile.getAbsolutePath(), 0700);
                                     }
                                 }
@@ -138,6 +151,7 @@ final class TermuxInstaller {
                     if (symlinks.isEmpty())
                         throw new RuntimeException("No SYMLINKS.txt encountered");
                     for (Pair<String, String> symlink : symlinks) {
+                        Log.d(TAG, "[link]:"+symlink.first + "<=" + symlink.second);
                         Os.symlink(symlink.first, symlink.second);
                     }
 
@@ -177,6 +191,7 @@ final class TermuxInstaller {
 
     private static void ensureDirectoryExists(File directory) {
         if (!directory.isDirectory() && !directory.mkdirs()) {
+            Log.d(TAG, "ensureDirectoryExists: "+directory.mkdir());
             throw new RuntimeException("Unable to create directory: " + directory.getAbsolutePath());
         }
     }
@@ -184,7 +199,7 @@ final class TermuxInstaller {
     /** Get bootstrap zip url for this systems cpu architecture. */
     private static URL determineZipUrl() throws MalformedURLException {
         String archName = determineTermuxArchName();
-        return new URL("https://termux.net/bootstrap/bootstrap-" + archName + ".zip");
+        return new URL("https://github.com/bingduoduo1/public_doc/raw/master/bootstraps_nyz/bootstrap-aarch64.zip");
     }
 
     private static String determineTermuxArchName() {
