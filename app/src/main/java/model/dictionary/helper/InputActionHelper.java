@@ -37,9 +37,11 @@ public abstract class InputActionHelper extends GlobalHelper{
         add("as");
         add("if");
         add("elif");
+        add("else");
         add("while");
         add("and");
         add("not");
+        add("or");
         add("for");
         add("in");
         add("is");

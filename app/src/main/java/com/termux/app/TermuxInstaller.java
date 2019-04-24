@@ -199,7 +199,7 @@ final class TermuxInstaller {
     /** Get bootstrap zip url for this systems cpu architecture. */
     private static URL determineZipUrl() throws MalformedURLException {
         String archName = determineTermuxArchName();
-        return new URL("https://github.com/bingduoduo1/public_doc/raw/master/bootstraps_zpj/bootstrap-aarch64.zip");
+        return new URL("https://github.com/bingduoduo1/public_doc/raw/master/bootstraps/android24/bootstrap-aarch64.zip");
     }
 
     private static String determineTermuxArchName() {

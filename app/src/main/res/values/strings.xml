@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-   <string name="application_name">冰多多</string>
+   <string name="application_name">冰多多(内测版)</string>
     <string name="btn_voice">voice</string>
     <string name="shared_user_label">Termux user</string>
    <string name="new_session">New session</string>
@@ -12,7 +12,7 @@
    <string name="help">Help</string>
    <string name="toggle_keep_screen_on">Keep screen on</string>
 
-   <string name="bootstrap_installer_body">Installing…</string>
+   <string name="bootstrap_installer_body">installing bootstrap packages  (请耐心等待,推荐使用校园网)...</string>
    <string name="bootstrap_error_title">Unable to install</string>
    <string name="bootstrap_error_body">Termux was unable to install the bootstrap packages.\n\nCheck your network connection and try again.</string>
    <string name="bootstrap_error_abort">Abort</string>

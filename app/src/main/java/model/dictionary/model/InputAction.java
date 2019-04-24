@@ -14,7 +14,7 @@ public class InputAction extends model.dictionary.model.BaseAction {
             throw new NotMatchActionTypeExpection();
         }
         if (!inputActionContentCheck(content)) {
-            throw new DictionaryException("invalid input action content------------------\n");
+            throw new DictionaryException("invalid input action content------------------"+content+"\n");
         }
         mContent = content;
     }

@@ -42,7 +42,7 @@ public class CommandDictionary implements BaseDictionaryInterface {
             mDictionary.put(new CustomWord("cp", NatureLanguageType.ENGLISH),
                 new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "cp"));
             mDictionary.put(new CustomWord("copy", NatureLanguageType.ENGLISH),
-                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "copy"));
+                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "cp"));
             mDictionary.put(new CustomWord("mv", NatureLanguageType.ENGLISH),
                 new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "mv"));
             mDictionary.put(new CustomWord("move", NatureLanguageType.ENGLISH),
@@ -71,12 +71,13 @@ public class CommandDictionary implements BaseDictionaryInterface {
                 new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "python"));
             mDictionary.put(new CustomWord("胎生", NatureLanguageType.CHINESE),
                 new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "python"));
-            mDictionary.put(new CustomWord("pass on", NatureLanguageType.ENGLISH),
+            mDictionary.put(new CustomWord("pass and", NatureLanguageType.ENGLISH),
                 new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "python"));
             mDictionary.put(new CustomWord("拍摄", NatureLanguageType.CHINESE),
                 new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "python"));
             mDictionary.put(new CustomWord("潘松", NatureLanguageType.CHINESE),
                 new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "python"));
+
 
             // 组合动作(combined action)
             mDictionary.put(new CustomWord("BDD", NatureLanguageType.ENGLISH),

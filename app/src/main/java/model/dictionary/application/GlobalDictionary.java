@@ -56,6 +56,7 @@ public class GlobalDictionary implements LookUpInterface {
         if (actionRef != null) {
             if (actionRef instanceof InputAction) {
                 action.append(((InputAction) actionRef).getContent());
+                return ;
             } else {
                 throw new DictionaryException("invalid instance class name: " + actionRef.getClass().getSimpleName());
             }

@@ -45,6 +45,8 @@ public class PythonDictionary implements BaseDictionaryInterface {
                 new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, "as"));
             mDictionary.put(new CustomWord("if", NatureLanguageType.ENGLISH),
                 new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, "if"));
+            mDictionary.put(new CustomWord("else", NatureLanguageType.ENGLISH),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, "else"));
             mDictionary.put(new CustomWord("else if", NatureLanguageType.ENGLISH),
                 new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, "elif"));
             mDictionary.put(new CustomWord("and", NatureLanguageType.ENGLISH),
@@ -64,6 +66,8 @@ public class PythonDictionary implements BaseDictionaryInterface {
             mDictionary.put(new CustomWord("is", NatureLanguageType.ENGLISH),
                 new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, "is"));
             mDictionary.put(new CustomWord("numpy", NatureLanguageType.ENGLISH),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, "numpy"));
+            mDictionary.put(new CustomWord("num py", NatureLanguageType.ENGLISH),
                 new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, "numpy"));
 
             //中文
