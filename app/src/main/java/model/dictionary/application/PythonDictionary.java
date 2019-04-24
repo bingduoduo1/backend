@@ -26,7 +26,7 @@ public class PythonDictionary implements BaseDictionaryInterface {
     public void initDictionary() {
         try {
             mDictionary.put(new CustomWord("import", NatureLanguageType.ENGLISH),
-                new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, "import"));
+                new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, "import "));
             mDictionary.put(new CustomWord("math", NatureLanguageType.ENGLISH),
                 new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, "math"));
             mDictionary.put(new CustomWord("sin", NatureLanguageType.ENGLISH),
@@ -69,6 +69,10 @@ public class PythonDictionary implements BaseDictionaryInterface {
                 new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, "numpy"));
             mDictionary.put(new CustomWord("num py", NatureLanguageType.ENGLISH),
                 new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, "numpy"));
+            mDictionary.put(new CustomWord("function", NatureLanguageType.ENGLISH),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, "function"));
+            mDictionary.put(new CustomWord("sigmoid", NatureLanguageType.ENGLISH),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, "sigmoid"));
 
             //中文
             mDictionary.put(new CustomWord("男排", NatureLanguageType.CHINESE),

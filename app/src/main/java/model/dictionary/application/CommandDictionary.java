@@ -5,6 +5,8 @@ import android.util.Log;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import model.dictionary.exception.DictionaryException;
 import model.dictionary.exception.NotImplementedError;
@@ -57,6 +59,16 @@ public class CommandDictionary implements BaseDictionaryInterface {
                 new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "chmod"));
             mDictionary.put(new CustomWord("bash", NatureLanguageType.ENGLISH),
                 new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "bash"));
+            mDictionary.put(new CustomWord("jump", NatureLanguageType.ENGLISH),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "bash jump.sh"));
+            mDictionary.put(new CustomWord("train", NatureLanguageType.ENGLISH),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "zsh run.sh"));
+            mDictionary.put(new CustomWord("man", NatureLanguageType.ENGLISH),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "man"));
+            mDictionary.put(new CustomWord("git", NatureLanguageType.ENGLISH),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "git"));
+            mDictionary.put(new CustomWord("ssh", NatureLanguageType.ENGLISH),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "ssh"));
 
             mDictionary.put(new CustomWord("python", NatureLanguageType.ENGLISH),
                 new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "python"));
@@ -99,10 +111,20 @@ public class CommandDictionary implements BaseDictionaryInterface {
         for (Map.Entry<BaseWord, BaseAction> entry : mDictionary.entrySet()) {
             Log.e(TAG, "Key:"+entry.getKey().getRawData() + " Value:" + entry.getValue().getActionType() );
         }
-
+        Pattern cmdHelp = Pattern.compile("[a-z]+ help$");
+        Matcher cmdHelpMatch = cmdHelp.matcher(key.getRawData());
         if (mDictionary.containsKey(key)) {
             Log.d(TAG, "lookUpAction: " + key.getRawData() + "::" + key.getNatureType());
             return mDictionary.get(key);
+        } else if (cmdHelpMatch.find()) {
+            String cmd = key.getRawData().split(" ")[0];
+            Log.d(TAG, "cmd content:"+cmd);
+            try {
+                return new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "man cmd");
+            } catch (DictionaryException e) {
+                e.printStackTrace();
+                return null;
+            }
         } else {
             return null;
         }
