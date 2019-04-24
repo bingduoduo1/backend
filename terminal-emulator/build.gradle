@@ -64,4 +64,5 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0-beta01'
 }
 
+
 apply from: '../scripts/bintray-publish.gradle'
