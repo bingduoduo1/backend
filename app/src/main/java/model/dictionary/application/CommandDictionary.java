@@ -103,7 +103,7 @@ public class CommandDictionary implements BaseDictionaryInterface {
 
         } catch (DictionaryException e) {
             e.printStackTrace();
-            Log.e(TAG, "init cmd dict fail");
+            //Log.e(TAG, "init cmd dict fail");
         }
     }
 
@@ -113,9 +113,9 @@ public class CommandDictionary implements BaseDictionaryInterface {
     }
 
     public BaseAction lookUpAction(BaseWord key) {
-        for (Map.Entry<BaseWord, BaseAction> entry : mDictionary.entrySet()) {
+        //for (Map.Entry<BaseWord, BaseAction> entry : mDictionary.entrySet()) {
             //Log.e(TAG, "Key:"+entry.getKey().getRawData() + " Value:" + entry.getValue().getActionType() );
-        }
+        //}
         Pattern cmdHelp = Pattern.compile("[a-z]+ help$");
         Matcher cmdHelpMatch = cmdHelp.matcher(key.getRawData());
         if (mDictionary.containsKey(key)) {

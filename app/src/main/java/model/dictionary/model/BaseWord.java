@@ -20,7 +20,6 @@ public abstract class BaseWord {
 
     @Override
     public boolean equals(Object obj){
-
         if(null == obj)return false;
         BaseWord word = (BaseWord)obj;
         if((this.mRawData).equals(word.getRawData())  &&

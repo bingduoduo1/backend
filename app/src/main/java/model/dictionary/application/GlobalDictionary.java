@@ -31,7 +31,7 @@ public class GlobalDictionary implements LookUpInterface {
     public void exactLookUpWord(String word, StringBuffer action) throws DictionaryException {
         BaseAction actionRef = null;
 
-        Log.e(TAG, "exactLookUpWord:"+word +";");
+        //Log.d(TAG, "exactLookUpWord:"+word +";");
         actionRef = mTextDict.lookUpAction(word);
         //Log.e(TAG, "exactLookUpWord: "+((InputAction) actionRef).getContent() );
         if (actionRef != null) {
