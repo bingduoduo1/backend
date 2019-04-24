@@ -235,8 +235,8 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
 
     void checkForFontAndColors() {
         try {
-            @SuppressLint("SdCardPath") File fontFile = new File("/data/data/com.bingduoduo/files/home/.termux/font.ttf");//defalut is "/data/data/com.termux/files/home/.termux/font.ttf");
-            @SuppressLint("SdCardPath") File colorsFile = new File("/data/data/com.bingduoduo/files/home/.termux/colors.properties");//default is /data/data/com.termux/files/home/.termux/colors.properties");
+            @SuppressLint("SdCardPath") File fontFile = new File("/data/data/com.termux/files/home/.termux/font.ttf");//defalut is "/data/data/com.termux/files/home/.termux/font.ttf");
+            @SuppressLint("SdCardPath") File colorsFile = new File("/data/data/com.termux/files/home/.termux/colors.properties");//default is /data/data/com.termux/files/home/.termux/colors.properties");
 
             final Properties props = new Properties();
             if (colorsFile.isFile()) {
