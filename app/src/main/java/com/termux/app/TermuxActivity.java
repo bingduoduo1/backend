@@ -409,7 +409,7 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
 
 
         // todo main
-        SpeechUtility.createUtility(this, "appid=5ca3663d");//appid需要和sdk的id相匹配
+        SpeechUtility.createUtility(this, "appid=5c9cc920");//appid需要和sdk的id相匹配
         this.requestPermissions();
         //if(null == mRecognizer){
         //    Log.e("TermuxActivity", "onCreate:  Null!!!");

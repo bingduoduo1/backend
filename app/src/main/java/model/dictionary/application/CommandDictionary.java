@@ -114,12 +114,12 @@ public class CommandDictionary implements BaseDictionaryInterface {
 
     public BaseAction lookUpAction(BaseWord key) {
         for (Map.Entry<BaseWord, BaseAction> entry : mDictionary.entrySet()) {
-            Log.e(TAG, "Key:"+entry.getKey().getRawData() + " Value:" + entry.getValue().getActionType() );
+            //Log.e(TAG, "Key:"+entry.getKey().getRawData() + " Value:" + entry.getValue().getActionType() );
         }
         Pattern cmdHelp = Pattern.compile("[a-z]+ help$");
         Matcher cmdHelpMatch = cmdHelp.matcher(key.getRawData());
         if (mDictionary.containsKey(key)) {
-            Log.d(TAG, "lookUpAction: " + key.getRawData() + "::" + key.getNatureType());
+            //Log.d(TAG, "lookUpAction: " + key.getRawData() + "::" + key.getNatureType());
             return mDictionary.get(key);
         } else if (cmdHelpMatch.find()) {
             String cmd = key.getRawData().split(" ")[0];
