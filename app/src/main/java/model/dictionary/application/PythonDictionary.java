@@ -71,8 +71,8 @@ public class PythonDictionary implements BaseDictionaryInterface {
                 new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, "numpy"));
             mDictionary.put(new CustomWord("function", NatureLanguageType.ENGLISH),
                 new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, "function"));
-            mDictionary.put(new CustomWord("sigmoid", NatureLanguageType.ENGLISH),
-                new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, "sigmoid"));
+            mDictionary.put(new CustomWord("test", NatureLanguageType.ENGLISH),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, "test"));
 
             //中文
             mDictionary.put(new CustomWord("男排", NatureLanguageType.CHINESE),

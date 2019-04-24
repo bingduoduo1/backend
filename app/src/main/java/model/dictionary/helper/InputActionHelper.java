@@ -7,6 +7,7 @@ public abstract class InputActionHelper extends GlobalHelper{
     private static ArrayList<String> mTokenList = new ArrayList<String>() {{
         add("(");
         add(")");
+        add("()");
         add(":");
         add(".");
         add(",");
@@ -21,6 +22,7 @@ public abstract class InputActionHelper extends GlobalHelper{
         add("ls");
         add("cd");
         add("python");
+        add("ipython");
         add("pwd");
         add("cp");
         add("mv");
@@ -35,7 +37,7 @@ public abstract class InputActionHelper extends GlobalHelper{
     }};
 
     private static ArrayList<String> mPythonKeyWordList = new ArrayList<String>() {{
-        add("import");
+        add("import ");
         add("from");
         add("def");
         add("with");
@@ -56,11 +58,16 @@ public abstract class InputActionHelper extends GlobalHelper{
         add("exit");
         add("numpy");
         add("function");
-        add("sigmoid");
+        add("test");
     }};
 
     private static ArrayList<String> mCombinedActionList = new ArrayList<String>() {{
         add("welcome to use BDD!!!");
+        add("bash jump.sh");
+        add("zsh run.sh");
+        add("man ssh");
+        add("man git");
+        add("bash testgit.sh");
     }};
 
 
