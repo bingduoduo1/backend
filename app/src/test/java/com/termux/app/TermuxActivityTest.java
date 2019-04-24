@@ -22,4 +22,5 @@ public class TermuxActivityTest extends TestCase {
 				"http://example.com", "http://more.example.com", "https://more.example.com");
 	}
 
+
 }
