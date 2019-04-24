@@ -47,9 +47,9 @@ public class TextDictionary implements BaseDictionaryInterface {
                 new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, "("));
             mDictionary.put(new CustomWord("right bracket", NatureLanguageType.ENGLISH),
                 new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, ")"));
-            mDictionary.put(new CustomWord("左圆括号", NatureLanguageType.CHINESE),
+            mDictionary.put(new CustomWord("左括号", NatureLanguageType.CHINESE),
                 new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, "("));
-            mDictionary.put(new CustomWord("右圆括号", NatureLanguageType.CHINESE),
+            mDictionary.put(new CustomWord("右括号", NatureLanguageType.CHINESE),
                 new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, ")"));
             mDictionary.put(new CustomWord("colon", NatureLanguageType.ENGLISH),
                 new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, ":"));

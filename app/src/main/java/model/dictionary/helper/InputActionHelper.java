@@ -27,6 +27,11 @@ public abstract class InputActionHelper extends GlobalHelper{
         add("rm");
         add("chmod");
         add("bash");
+        add("jump");
+        add("train");
+        add("man");
+        add("git");
+        add("ssh");
     }};
 
     private static ArrayList<String> mPythonKeyWordList = new ArrayList<String>() {{
@@ -50,6 +55,8 @@ public abstract class InputActionHelper extends GlobalHelper{
         add("cos");
         add("exit");
         add("numpy");
+        add("function");
+        add("sigmoid");
     }};
 
     private static ArrayList<String> mCombinedActionList = new ArrayList<String>() {{
