@@ -5,6 +5,11 @@ import junit.framework.TestCase;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 
+import model.*;
+import model.dictionary.application.CommandDictionary;
+import model.dictionary.model.CustomWord;
+import model.dictionary.model.NatureLanguageType;
+
 public class TermuxActivityTest extends TestCase {
 
 	private void assertUrlsAre(String text, String... urls) {
@@ -21,5 +26,10 @@ public class TermuxActivityTest extends TestCase {
 		assertUrlsAre("hello http://example.com world and http://more.example.com with secure https://more.example.com",
 				"http://example.com", "http://more.example.com", "https://more.example.com");
 	}
+
+	public void testDictionary(){
+        CommandDictionary cmdDictionary = CommandDictionary.createDictionary();
+        cmdDictionary.lookUpAction(new CustomWord("ls", NatureLanguageType.ENGLISH));
+    }
 
 }
