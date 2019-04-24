@@ -69,6 +69,8 @@ public class CommandDictionary implements BaseDictionaryInterface {
                 new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "git"));
             mDictionary.put(new CustomWord("ssh", NatureLanguageType.ENGLISH),
                 new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "ssh"));
+            mDictionary.put(new CustomWord("push", NatureLanguageType.ENGLISH),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "bash testgit.sh"));
 
             mDictionary.put(new CustomWord("python", NatureLanguageType.ENGLISH),
                 new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "python"));
@@ -78,27 +80,30 @@ public class CommandDictionary implements BaseDictionaryInterface {
                 new CommandAction(ActionType.COMMAND, ExecutePlaceType.GENERAL, "backspace"));
             //python
             mDictionary.put(new CustomWord("派送", NatureLanguageType.CHINESE),
-                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "python"));
+                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "ipython"));
             mDictionary.put(new CustomWord("拍手", NatureLanguageType.CHINESE),
-                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "python"));
+                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "ipython"));
             mDictionary.put(new CustomWord("胎生", NatureLanguageType.CHINESE),
-                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "python"));
+                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "ipython"));
             mDictionary.put(new CustomWord("pass and", NatureLanguageType.ENGLISH),
-                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "python"));
+                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "ipython"));
             mDictionary.put(new CustomWord("拍摄", NatureLanguageType.CHINESE),
-                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "python"));
+                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "ipython"));
             mDictionary.put(new CustomWord("潘松", NatureLanguageType.CHINESE),
-                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "python"));
+                new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "ipython"));
 
 
             // 组合动作(combined action)
-            mDictionary.put(new CustomWord("BDD", NatureLanguageType.ENGLISH),
+            mDictionary.put(new CustomWord("bdd", NatureLanguageType.ENGLISH),
                 new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, "welcome to use BDD!!!"));
             mDictionary.put(new CustomWord("冰多多", NatureLanguageType.CHINESE),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, "welcome to use BDD!!!"));
+            mDictionary.put(new CustomWord("冰", NatureLanguageType.CHINESE),
                 new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, "welcome to use BDD!!!"));
 
         } catch (DictionaryException e) {
             e.printStackTrace();
+            Log.e(TAG, "init cmd dict fail");
         }
     }
 
@@ -119,8 +124,14 @@ public class CommandDictionary implements BaseDictionaryInterface {
         } else if (cmdHelpMatch.find()) {
             String cmd = key.getRawData().split(" ")[0];
             Log.d(TAG, "cmd content:"+cmd);
+            if (cmd.equals("sh")) {
+                cmd = "ssh";
+            }
+            if (cmd.equals("get")) {
+                cmd = "git";
+            }
             try {
-                return new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "man cmd");
+                return new InputAction(ActionType.INPUT, ExecutePlaceType.SHELL, "man "+cmd);
             } catch (DictionaryException e) {
                 e.printStackTrace();
                 return null;

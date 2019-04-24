@@ -286,6 +286,7 @@ public class SpeechRecognitionIat extends Activity implements SpeechRecognitionI
             mLookUpHandle.exactLookUpWord(mParserResult.toString().toLowerCase(), ret);
         } catch (DictionaryException e){
             e.printStackTrace();
+            Log.e(LOG_TAG, "not found"+mParserResult.toString());
         }
         mParserResult.setLength(0);
 

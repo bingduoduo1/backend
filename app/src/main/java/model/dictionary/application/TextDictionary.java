@@ -51,6 +51,8 @@ public class TextDictionary implements BaseDictionaryInterface {
                 new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, "("));
             mDictionary.put(new CustomWord("右括号", NatureLanguageType.CHINESE),
                 new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, ")"));
+            mDictionary.put(new CustomWord("括号", NatureLanguageType.CHINESE),
+                new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, "()"));
             mDictionary.put(new CustomWord("colon", NatureLanguageType.ENGLISH),
                 new InputAction(ActionType.INPUT, ExecutePlaceType.GENERAL, ":"));
             mDictionary.put(new CustomWord("冒号", NatureLanguageType.CHINESE),
