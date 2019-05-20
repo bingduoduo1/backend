@@ -19,6 +19,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -104,8 +105,11 @@ final class TermuxInstaller {
                     final byte[] buffer = new byte[8096];
                     final List<Pair<String, String>> symlinks = new ArrayList<>(50);
 
+
                     final URL zipUrl = determineZipUrl();
-                    try (ZipInputStream zipInput = new ZipInputStream(zipUrl.openStream())) {
+                    InputStream bootInput = activity.getResources().openRawResource(R.raw.bootstrapaarch64);
+                    try (ZipInputStream zipInput = new ZipInputStream(bootInput)) {
+                    //try (ZipInputStream zipInput = new ZipInputStream(zipUrl.openStream())) {
                         ZipEntry zipEntry;
                         while ((zipEntry = zipInput.getNextEntry()) != null) {
                             if (zipEntry.getName().equals("SYMLINKS.txt")) {
@@ -205,7 +209,7 @@ final class TermuxInstaller {
     private static String determineTermuxArchName() {
         // Note that we cannot use System.getProperty("os.arch") since that may give e.g. "aarch64"
         // while a 64-bit runtime may not be installed (like on the Samsung Galaxy S5 Neo).
-        // Instead we search through the supported abi:s on the device, see:
+        // Instead we search through the supported abi:s on the device, see:u
         // http://developer.android.com/ndk/guides/abis.html
         // Note that we search for abi:s in preferred order (the ordering of the
         // Build.SUPPORTED_ABIS list) to avoid e.g. installing arm on an x86 system where arm
